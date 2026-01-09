@@ -1,4 +1,28 @@
+# Archivos de configuración y desarrollo
 .hintrc
-notasDelDesarrollor.md
 .vscode/
+
+# Notas privadas del desarrollador
+notasDelDesarrollador.txt
+notasDelDesarrollor.md
+
+# Documentos académicos y archivos temporales
+*.png
+*.jpg
+*.jpeg
+
+# Archivos de trabajo privados
+TODO.txt
 TODO.md
+
+# Node modules y dependencias (futuro)
+node_modules/
+npm-debug.log*
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de respaldo
+*.bak
+*.tmp
