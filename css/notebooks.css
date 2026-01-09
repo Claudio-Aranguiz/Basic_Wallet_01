@@ -1,0 +1,35 @@
+/* Estilos para pantallas muy grandes y notebooks */
+
+/* Pantallas ultra anchas (1920px+) */
+@media screen and (min-width: 1920px) {
+  body {
+    padding: 3.5rem 4rem;
+    padding-bottom: 110px;
+  }
+  
+  main {
+    padding: 3.5rem;
+    padding-bottom: 4rem;
+  }
+  
+  footer {
+    padding: 1.5rem 3rem;
+  }
+}
+
+/* Pantallas grandes en orientación portrait (769px - 1199px) */
+@media screen and (min-width: 769px) and (max-width: 1199px) and (orientation: portrait) {
+  body {
+    padding: 1.5rem;
+    padding-bottom: 85px;
+  }
+  
+  main {
+    padding: 1.5rem;
+    padding-bottom: 2rem;
+  }
+  
+  footer {
+    padding: 0.7rem 1.5rem;
+  }
+}

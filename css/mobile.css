@@ -1,0 +1,58 @@
+/* Estilos para dispositivos móviles */
+
+/* Móviles pequeños (hasta 375px) */
+@media screen and (max-width: 375px) {
+  body { 
+    padding: 0.5rem;
+    padding-bottom: 70px;
+  }
+  
+  main {
+    padding: 0.5rem;
+    padding-bottom: 1rem;
+  }
+  
+  #mainindex {
+    margin-top: 3rem;
+  }
+  
+  #mainlog {
+    margin-top: 1.5rem;
+  }
+  
+  footer {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .table-container { 
+    max-height: 60vh; 
+    overflow-y: auto;
+  }
+  
+  .table-responsive {
+    width: max-content;
+  }
+
+  thead {
+    background-color: #485563; 
+    z-index: 10;
+  }
+}
+
+/* Móviles en horizontal (hasta 667px en landscape) */
+  @media screen and (min-width: 376px) and (max-width: 650px) and (orientation: landscape) {
+  body {
+    padding: 4rem;
+    padding-bottom: 60px;
+  }
+  
+  footer {
+    padding: 0.4rem 0.8rem;
+    height: 2.5rem;
+  }
+
+  #mainindex {
+    margin-top: 1.5rem;
+  }
+}

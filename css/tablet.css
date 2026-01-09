@@ -1,0 +1,78 @@
+/* Estilos para tablets */
+
+/* Tablet pequeña en portrait (651px - 744px) */
+@media screen and (min-width: 651px) and (max-width: 744px) and (orientation: portrait) {
+    body {
+        padding: 1rem;
+        padding-bottom: 75px;
+    }
+    
+    main {
+        padding: 1rem;
+        padding-bottom: 1.5rem;
+    }
+    
+    footer {
+        padding: 0.6rem 1rem;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+        width: auto;
+    }
+}
+
+/* Tablet pequeña en landscape (651px - 744px) */
+@media screen and (min-width: 651px) and (max-width: 744px) and (orientation: landscape) {
+    body {
+        padding: 0.8rem;
+        padding-bottom: 65px;
+    }
+    
+    main {
+        padding: 0.8rem;
+        padding-bottom: 1.2rem;
+    }
+    
+    footer {
+        padding: 0.5rem 0.8rem;
+    }
+    .table-responsive {
+        overflow-x: auto;
+        width: auto;
+    }
+}
+
+/* Tablet mediana en portrait (745px - 991px) */
+@media screen and (min-width: 745px) and (max-width: 991px) and (orientation: portrait) {
+    body {
+        padding: 1.5rem;
+        padding-bottom: 85px;
+    }
+    
+    main {
+        padding: 1.5rem;
+        padding-bottom: 2rem;
+    }
+    
+    footer {
+        padding: 0.7rem 1.2rem;
+    }
+}
+
+/* Tablet mediana en landscape (745px - 991px) */
+@media screen and (min-width: 745px) and (max-width: 991px) and (orientation: landscape) {
+    body {
+        padding: 1rem;
+        padding-bottom: 70px;
+    }
+    
+    main {
+        padding: 1.2rem;
+        padding-bottom: 1.5rem;
+    }
+    
+    footer {
+        padding: 0.6rem 1rem;
+    }
+}

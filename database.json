@@ -1,0 +1,197 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "email": "admin@alkewallet.com",
+      "password": "admin123",
+      "firstName": "Administrador",
+      "lastName": "AlkeWallet",
+      "phone": "+56900000001",
+      "balance": 1000000,
+      "accountNumber": "12345678000",
+      "createdAt": "2025-01-01T08:00:00Z",
+      "isActive": true,
+      "profileImage": "img/admin-avatar.png"
+    },
+    {
+      "id": 2,
+      "username": "juan.perez",
+      "email": "juan.perez@email.com",
+      "password": "123456",
+      "firstName": "Juan",
+      "lastName": "Pérez",
+      "phone": "+56912345678",
+      "balance": 250000,
+      "accountNumber": "12345678901",
+      "createdAt": "2025-01-01T10:00:00Z",
+      "isActive": true,
+      "profileImage": "img/avatar1.png"
+    },
+    {
+      "id": 3,
+      "username": "maria.gonzalez",
+      "email": "maria.gonzalez@email.com",
+      "password": "password123",
+      "firstName": "María",
+      "lastName": "González",
+      "phone": "+56987654321",
+      "balance": 180000,
+      "accountNumber": "12345678902",
+      "createdAt": "2025-01-02T14:30:00Z",
+      "isActive": true,
+      "profileImage": "img/avatar2.png"
+    },
+    {
+      "id": 4,
+      "username": "carlos.rodriguez",
+      "email": "carlos.rodriguez@email.com",
+      "password": "carlos2025",
+      "firstName": "Carlos",
+      "lastName": "Rodríguez",
+      "phone": "+56911111111",
+      "balance": 320000,
+      "accountNumber": "12345678903",
+      "createdAt": "2025-01-03T09:15:00Z",
+      "isActive": true,
+      "profileImage": "img/avatar3.png"
+    },
+    {
+      "id": 5,
+      "username": "ana.martinez",
+      "email": "ana.martinez@email.com",
+      "password": "ana123",
+      "firstName": "Ana",
+      "lastName": "Martínez",
+      "phone": "+56922222222",
+      "balance": 95000,
+      "accountNumber": "12345678904",
+      "createdAt": "2025-01-04T16:45:00Z",
+      "isActive": true,
+      "profileImage": "img/avatar4.png"
+    },
+    {
+      "id": 6,
+      "username": "luis.hernandez",
+      "email": "luis.hernandez@email.com",
+      "password": "luis456",
+      "firstName": "Luis",
+      "lastName": "Hernández",
+      "phone": "+56933333333",
+      "balance": 450000,
+      "accountNumber": "12345678905",
+      "createdAt": "2025-01-05T11:20:00Z",
+      "isActive": true,
+      "profileImage": "img/avatar5.png"
+    },
+    {
+      "id": 7,
+      "username": "test",
+      "email": "test@test.com",
+      "password": "123",
+      "firstName": "Usuario",
+      "lastName": "Prueba",
+      "phone": "+56900000000",
+      "balance": 100000,
+      "accountNumber": "12345678999",
+      "createdAt": "2025-01-05T12:00:00Z",
+      "isActive": true,
+      "profileImage": "img/avatar1.png"
+    }
+  ],
+  "transactions": [
+    {
+      "id": 1,
+      "fromUserId": 2,
+      "toUserId": 3,
+      "amount": 50000,
+      "type": "transfer",
+      "description": "Pago de almuerzo",
+      "timestamp": "2025-01-05T12:00:00Z",
+      "status": "completed",
+      "transactionCode": "TXN001"
+    },
+    {
+      "id": 2,
+      "fromUserId": null,
+      "toUserId": 2,
+      "amount": 100000,
+      "type": "deposit",
+      "description": "Depósito desde cuenta bancaria",
+      "timestamp": "2025-01-04T15:30:00Z",
+      "status": "completed",
+      "transactionCode": "DEP001"
+    },
+    {
+      "id": 3,
+      "fromUserId": 4,
+      "toUserId": 5,
+      "amount": 30000,
+      "type": "transfer",
+      "description": "Pago de transporte",
+      "timestamp": "2025-01-04T10:15:00Z",
+      "status": "completed",
+      "transactionCode": "TXN002"
+    }
+  ],
+  "depositMethods": [
+    {
+      "id": 1,
+      "name": "Transferencia Bancaria",
+      "code": "bank_transfer",
+      "minAmount": 10000,
+      "maxAmount": 1000000,
+      "fee": 0,
+      "enabled": true
+    },
+    {
+      "id": 2,
+      "name": "Tarjeta de Débito",
+      "code": "debit_card",
+      "minAmount": 5000,
+      "maxAmount": 500000,
+      "fee": 1000,
+      "enabled": true
+    },
+    {
+      "id": 3,
+      "name": "Tarjeta de Crédito",
+      "code": "credit_card",
+      "minAmount": 5000,
+      "maxAmount": 300000,
+      "fee": 2500,
+      "enabled": true
+    }
+  ],
+  "appSettings": {
+    "currency": "CLP",
+    "currencySymbol": "$",
+    "maxTransferAmount": 500000,
+    "minTransferAmount": 1000,
+    "maxDailyTransfers": 10,
+    "maintenanceMode": false,
+    "supportEmail": "soporte@alkewallet.com",
+    "supportPhone": "+56900000000",
+    "appVersion": "1.0.0"
+  },
+  "notifications": [
+    {
+      "id": 1,
+      "userId": 2,
+      "title": "Transferencia recibida",
+      "message": "Has recibido $25.000 de Luis Hernández",
+      "type": "transfer_received",
+      "read": false,
+      "timestamp": "2025-01-03T20:45:00Z"
+    },
+    {
+      "id": 2,
+      "userId": 3,
+      "title": "Transferencia enviada",
+      "message": "Has enviado $15.000 a Luis Hernández",
+      "type": "transfer_sent",
+      "read": true,
+      "timestamp": "2025-01-02T16:10:00Z"
+    }
+  ]
+}
