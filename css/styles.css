@@ -54,6 +54,65 @@ footer {
     inline-size: fit-content;
 }
 
+/* Estilos para Avatar y Navbar */
+.avatardiv {
+    inline-size: fit-content;
+    width: 35px; 
+    height: 35px;
+}
+
+.user-avatar-circle {
+    width: 35px;
+    height: 35px;
+}
+
+/* Navbar Enhancements */
+.navbar-balance {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.navbar-page-indicator {
+    font-size: 0.95rem;
+    font-weight: 600;
+    opacity: 0.9;
+}
+
+/* Notificaciones y elementos básicos */
+.notification-badge {
+    font-size: 0.65rem;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    border: 2px solid white;
+}
+
+/* Navbar sticky mantenido */
+.navbar.sticky-top {
+    position: sticky !important;
+    top: 0;
+    z-index: 1020;
+}
+
+/* Media queries simplificadas */
+@media (max-width: 576px) {
+    .notification-badge {
+        font-size: 0.6rem;
+        min-width: 16px;
+        height: 16px;
+        top: -3px;
+        right: -3px;
+    }
+}
+
+
+
 /* Componentes */
 .modal-content ,tr ,th, td, .card-body {
     background-color: #3a4b5d !important;

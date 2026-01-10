@@ -3,7 +3,6 @@
 /* Desktop pequeño (992px - 1199px) */
 @media screen and (min-width: 992px) and (max-width: 1199px) {
     body {
-        padding: 2rem;
         padding-bottom: 90px;
     }
     
@@ -20,7 +19,6 @@
 /* Desktop grande (1200px - 1399px) */
 @media screen and (min-width: 1200px) and (max-width: 1399px) {
     body {
-        padding: 2.5rem;
         padding-bottom: 95px;
     }
     
@@ -37,7 +35,6 @@
 /* Desktop extra grande (1400px - 1919px) */
 @media screen and (min-width: 1400px) and (max-width: 1919px) {
     body {
-        padding: 3rem;
         padding-bottom: 100px;
     }
     

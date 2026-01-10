@@ -14,16 +14,63 @@
     <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body class="text-center">
-    <section> 
-      <div class="btn-group " role="group" aria-label="Basic example">
-        <a class="btn btn-outline-info" href="./sendmoney.html">Transferir</a>
-        <a class="btn btn-outline-info" href="./transactions.html">Historial</a>
-        <a class="btn btn-outline-info" href="./menu.html">Volver al menu</a>
-      </div>
-      <h1 class="mt-4" >Aumentar Saldo</h1>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-info sticky-top">
+        <div class="container-fluid">
+            <!-- Avatar/Portrait del usuario (futuro acceso a perfil) -->
+            <a class="navbar-brand d-flex align-items-center" href="javascript:void(0)" title="Ir al perfil de usuario">
+                <div class="user-avatar me-2">
+                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center user-avatar-circle">
+                        <i class="fas fa-user text-info fs-5"></i>
+                    </div>
+                </div>
+                <span class="d-none d-md-inline text-white fw-bold">Mi Perfil</span>
+            </a>
+            <button class="navbar-toggler border-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link text-white mx-2" href="./sendmoney.html">
+                            <i class="fas fa-paper-plane me-1"></i>Transferir
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white mx-2" href="./transactions.html">
+                            <i class="fas fa-history me-1"></i>Historial
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white mx-2" href="./menu.html">
+                            <i class="fas fa-home me-1"></i>Menú Principal
+                        </a>
+                    </li>
+                </ul>
+                
+                <!-- Botón de notificaciones -->
+                <button class="btn btn-outline-light btn-sm mr-3 position-relative" 
+                        onclick="showNotification('No hay notificaciones nuevas', 'info', 'Notificaciones')" title="Notificaciones">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge bg-danger">2</span>
+                </button>
+                
+                <div class="d-flex justify-content-center mx-2 my-3">
+                    <a class="btn btn-outline-light btn-md" href="./index.html">
+                        <i class="fas fa-sign-out-alt mr-3"></i>Cerrar Sesión
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <main class="container-fluid px-3 pt-4">
+      <!-- Título de la página -->
+      <section class="text-center mb-4">
+        <h1 class="display-6 text-info">
+          <i class="fas fa-plus-circle me-2"></i>Aumentar Saldo
+        </h1>
+      </section>
       
-    </section>
-    <main class="container-fluid px-3">
       <!-- Mostrar saldo actual -->
       <section class="balance-summary mb-4">
         <div class="current-balance my-4 p-3 border rounded-2 border-info d-inline-block bg-dark bg-opacity-25">
@@ -105,6 +152,12 @@
     
     <!-- Iconos de Font Awesome -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    
+    <!-- Sistema de notificaciones AlkeWallet -->
+    <script src="../js/notifications.js"></script>
     
     <!-- Script personalizado para el depósito -->
     <script>

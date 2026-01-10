@@ -10,14 +10,42 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body class="text-center">
-    <main>
-        <section class="d-flex justify-content-end"> <!-- Sección de usuario (imagen+saludo+notificaciones) -->
-            <a class="btn btn-info btn-sm" href="./index.html">Cerrar Sesión</a>
-       </section>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-info sticky-top">
+        <div class="container-fluid px-2">
+            <!-- Avatar/Portrait del usuario (futuro acceso a perfil) -->
+            <a class="navbar-brand d-flex align-items-center" href="#" title="Ir al perfil de usuario">
+                <div class="user-avatar me-2">
+                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center avatardiv">
+                        <i class="fas fa-user text-info fs-5"></i>
+                    </div>
+                </div>
+                <span class="d-none d-md-inline text-white fw-bold">Mi Perfil</span>
+            </a>
+            
+            <div class="d-flex align-items-center">
+                <!-- Botón de notificaciones -->
+                <button class="btn btn-outline-light btn-sm mr-3 position-relative" 
+                        onclick="showNotification('No hay notificaciones nuevas', 'info', 'Notificaciones')" 
+                        title="Notificaciones">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge bg-danger">2</span>
+                </button>
+                
+                <!-- Cerrar sesión -->
+                <a class="btn btn-outline-light btn-sm" href="./index.html" title="Cerrar Sesión">
+                    <i class="fas fa-sign-out-alt"></i><span class="d-none d-sm-inline ms-1"> Cerrar Sesión</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    <main class="pt-3">
        <section class="p-4"> <!-- Sección de saldo disponible -->
               <h6>Saldo disponible</h6>
             <div class="input-group mb-3">
@@ -32,10 +60,14 @@
        <section class=" p-4 my-4 rounded-3"> <!-- Sección de menú de navegación -->
            <h1>Menú Principal</h1>
            <br>
-           <div class="btn-group " role="group" aria-label="Basic example">
-               <a class="btn btn-info mx-1" href="./deposit.html">Aumentar saldo</a>
-               <a class="btn btn-info mx-1" href="./sendmoney.html">Enviar dinero</a>
-               <a class="btn btn-info mx-1" href="./transactions.html">Historial de transacciones</a>
+           <div class="btn-group " role="group" aria-label="Botones de navegación principal">
+               <a class="btn btn-info mx-1 my-1" href="./deposit.html">Aumentar saldo</a>
+               <a class="btn btn-info mx-1 my-1" href="./sendmoney.html">Enviar dinero</a>
+               <a class="btn btn-info mx-1 my-1" href="./transactions.html">Historial de transacciones</a>
+           </div>
+           <div class="btn-group" role="group" aria-label="Botones de contactos">
+               <a class="btn btn-info mx-1 my-1" href="">Contactos</a>
+               <a class="btn btn-info mx-1 my-1" href="">Editar Contactos</a>
            </div>
        </section>
    
@@ -48,5 +80,8 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
+    
+    <!-- Sistema de notificaciones AlkeWallet -->
+    <script src="../js/notifications.js"></script>
 </body>
 </html>
