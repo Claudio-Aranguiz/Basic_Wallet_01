@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alke Wallet - Deposit</title>
     <!-- Estilos y tipografía externas -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">  
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <link rel="stylesheet" href="../css/styles.css">
 </head>
@@ -25,7 +26,7 @@
                 </div>
                 <span class="d-none d-md-inline text-white fw-bold">Mi Perfil</span>
             </a>
-            <button class="navbar-toggler border-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler border-light" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -64,18 +65,13 @@
     </nav>
     
     <main class="container-fluid px-3 pt-4">
-      <!-- Título de la página -->
-      <section class="text-center mb-4">
-        <h1 class="display-6 text-info">
-          <i class="fas fa-plus-circle me-2"></i>Aumentar Saldo
-        </h1>
-      </section>
-      
+
       <!-- Mostrar saldo actual -->
-      <section class="balance-summary mb-4">
-        <div class="current-balance my-4 p-3 border rounded-2 border-info d-inline-block bg-dark bg-opacity-25">
+      <section class="balance-summary">
+        <div class="current-balance my-3 p-3 border rounded-2 border-info d-inline-block bg-dark bg-opacity-25">
           <h6 class="mb-1">Saldo Actual</h6>
-          <h2 class="fw-bold text-info">$ 173,249.50</h2>
+          <h2 class="fw-bold text-info">$173,249.50</h2>
+          <small class="text-muted">Actualizado en tiempo real</small>
         </div>
       </section>
 
@@ -106,20 +102,22 @@
                   <label for="depositAmount" class="form-label fw-bold">Monto a Depositar:</label>
                   <div class="input-group">
                     <span class="input-group-text">$</span>
-                    <input type="number" class="form-control" id="depositAmount" placeholder="0.00" min="0.01" step="0.01" required>
+                    <input type="number" class="form-control" id="depositAmount" placeholder="10,000" min="1000" max="5000000" step="1" required>
                   </div>
+                  <small class="form-text text-muted">Mínimo: $1,000 - Máximo: $5,000,000</small>
                 </div>
                 <div class="mb-3">
                   <label for="depositMethod" class="form-label fw-bold">Método de depósito:</label>
-                  <select class="form-select" id="depositMethod" required>
+                  <select class="form-select form-control" id="depositMethod" required>
                     <option value="" selected>Seleccionar método</option>
-                    <option value="bank">Transferencia bancaria</option>
-                    <option value="card">Tarjeta de crédito/débito</option>
-                    <option value="paypal">PayPal</option>
-                    <option value="crypto">Criptomoneda</option>
+                    <option value="bank">🏦 Transferencia bancaria</option>
+                    <option value="card">💳 Tarjeta de crédito/débito</option>
+                    <option value="paypal">💵 PayPal</option>
+                    <option value="crypto">₿ Criptomoneda</option>
+                    <option value="cash">💵 Efectivo - Sucursal</option>
                   </select>
                 </div>
-                <button type="submit" class="btn btn-success w-100">
+                <button type="submit" class="btn btn-success w-100" id="depositSubmitBtn">
                   <i class="fas fa-plus-circle me-2"></i>Realizar Depósito
                 </button>
               </form>
@@ -129,16 +127,18 @@
       </section>
 
       <!-- Información adicional -->
-      <section class="deposit-info mt-4">
+      <section class="deposit-info mt-2">
         <div class="row justify-content-center">
           <div class="col-md-8">
             <div class="alert alert-info" role="alert">
               <h6 class="alert-heading"><i class="fas fa-info-circle me-2"></i>Información importante:</h6>
               <ul class="mb-0">
                 <li>Los depósitos se procesan inmediatamente</li>
-                <li>Monto mínimo de depósito: $0.01</li>
-                <li>Monto máximo de depósito: $10,000.00 por transacción</li>
+                <li>Monto mínimo de depósito: $1,000</li>
+                <li>Monto máximo de depósito: $5,000,000 por transacción</li>
                 <li>No se cobran comisiones por depósitos</li>
+                <li>Tu saldo se actualiza automáticamente</li>
+                <li>Todas las transacciones quedan registradas en tu historial</li>
               </ul>
             </div>
           </div>
@@ -148,91 +148,22 @@
     <footer class="sticky-sem-bottom border rounded-2 border-secondary mt-4">
         <small>© 2026 -- Alke Wallet. </small>
     </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     
-    <!-- Iconos de Font Awesome -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
-    
-    <!-- jQuery -->
+    <!-- jQuery debe cargarse ANTES que Bootstrap -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    
+    <!-- Session Management -->
+    <script src="../data/database.js"></script>
+    <script src="../js/sessionManager.js"></script>
+    
+    <!-- Transaction Management -->
+    <script src="../js/transactionManager.js"></script>
+    <script src="../js/depositManager.js"></script>
     
     <!-- Sistema de notificaciones AlkeWallet -->
     <script src="../js/notifications.js"></script>
-    
-    <!-- Script personalizado para el depósito -->
-    <script>
-        // Manejar el formulario de depósito
-        document.getElementById('depositForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const amount = document.getElementById('depositAmount').value;
-            const method = document.getElementById('depositMethod').value;
-            
-            // Validaciones
-            if (!amount || !method) {
-                alert('Por favor, completa todos los campos requeridos.');
-                return;
-            }
-            
-            if (parseFloat(amount) < 0.01) {
-                alert('El monto mínimo de depósito es $0.01');
-                return;
-            }
-            
-            if (parseFloat(amount) > 10000) {
-                alert('El monto máximo de depósito es $10,000.00 por transacción');
-                return;
-            }
-            
-            // Simular procesamiento
-            const submitBtn = this.querySelector('button[type="submit"]');
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Procesando...';
-            
-            // Simular delay de procesamiento
-            setTimeout(() => {
-                const methodNames = {
-                    'bank': 'Transferencia bancaria',
-                    'card': 'Tarjeta de crédito/débito', 
-                    'paypal': 'PayPal',
-                    'crypto': 'Criptomoneda'
-                };
-                
-                alert(`¡Depósito exitoso!\nMonto: $${parseFloat(amount).toFixed(2)}\nMétodo: ${methodNames[method]}\n\nTu saldo ha sido actualizado.`);
-                
-                // Resetear formulario
-                this.reset();
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-plus-circle me-2"></i>Realizar Depósito';
-                
-                // Opcional: redirigir a transacciones para ver el historial
-                // window.location.href = './transactions.html';
-            }, 2000);
-        });
-        
-        // Manejar el botón de escanear QR
-        document.getElementById('scanQRBtn').addEventListener('click', function() {
-            // Simular funcionalidad de escáner QR
-            this.disabled = true;
-            this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Iniciando cámara...';
-            
-            setTimeout(() => {
-                alert('Funcionalidad de escáner QR en desarrollo.\nPor favor, usa el depósito manual por ahora.');
-                this.disabled = false;
-                this.innerHTML = '<i class="fas fa-camera me-2"></i>Escanear Código QR';
-            }, 1500);
-        });
-        
-        // Formatear el input de monto
-        document.getElementById('depositAmount').addEventListener('input', function() {
-            let value = this.value;
-            if (value && !isNaN(value)) {
-                // Limitar a 2 decimales
-                if (value.includes('.') && value.split('.')[1].length > 2) {
-                    this.value = parseFloat(value).toFixed(2);
-                }
-            }
-        });
-    </script>
 </body>
 </html>

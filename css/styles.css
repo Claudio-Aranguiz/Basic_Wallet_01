@@ -18,6 +18,81 @@
 
 /* CSS Generales */
 
+/* Hover cards para el menú */
+.hover-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.hover-card .card-body {
+    padding: 1.5rem;
+}
+
+.hover-card .fas {
+    transition: transform 0.3s ease;
+}
+
+.hover-card:hover .fas {
+    transform: scale(1.1);
+}
+
+/* Balance input mejorado */
+.current-balance .form-control {
+    border: none;
+    background: transparent;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #28a745 !important;
+}
+
+.current-balance .input-group-text {
+    border: none;
+    font-weight: bold;
+}
+
+/* Contenedor del input de balance */
+.balance-input-container {
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+/* Notificación badge mejorada */
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/* Avatar circle consistente */
+.user-avatar-circle {
+    width: 40px;
+    height: 40px;
+}
+
+/* Responsive improvements para el menú */
+@media (max-width: 768px) {
+    .current-balance {
+        margin: 0 auto;
+        max-width: 300px;
+    }
+    
+    .hover-card {
+        margin-bottom: 1rem;
+    }
+}
 
 /* Estructuras */
 body {

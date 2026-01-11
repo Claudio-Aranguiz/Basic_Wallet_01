@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alke Wallet - Transactions</title>
     <!-- Estilos y tipografía externas -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">  
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,7 +26,7 @@
                 </div>
                 <span class="d-none d-md-inline text-white fw-bold">Mi Perfil</span>
             </a>
-            <button class="navbar-toggler border-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler border-light" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -65,18 +65,19 @@
         </div>
     </nav>
     <section>
-      <h1 class="my-5">Transacciones</h1>
-      <div class="balance-summary mb-4  ">
+      <h1 class="my-5">Historial de Transacciones</h1>
+      <div class="balance-summary mb-4">
           <h6 class="mb-1">Saldo Actual</h6>
           <h2 class="fw-bold">$ 173,249.50</h2>
+          <small class="text-muted">Actualizado en tiempo real</small>
         </div>
     </section>
     <main class="container-fluid px-0 pb-1">
       <div class="row">
-        <div class="col-12">
-          <div class="table-container">
-            <div class="table-responsive border border-info">
-              <table class="table table-hover mb-0">
+        <div class="divmaintransactions mx-auto">
+                <div class="table-container">
+                    <div class="table-responsive border border-info">
+                        <table class="table table-hover mb-0">
                 <thead class="sticky-top" >
                   <tr>
                     <th scope="col">Fecha</th>
@@ -86,68 +87,37 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <!-- Las transacciones se cargan dinámicamente -->
                   <tr>
-                    <td class="fw-semibold">22/12/2025</td>
-                    <td><span class="badge bg-success rounded-pill">Depósito</span></td>
-                    <td>Sucursal Central</td>
-                    <td class="text-success fw-bold text-end">+$50,000.00</td>
-                  </tr>
-                  <tr>
-                    <td class="fw-semibold">21/12/2025</td>
-                    <td><span class="badge bg-danger rounded-pill">Transferencia</span></td>
-                    <td>María González</td>
-                    <td class="text-danger fw-bold text-end">-$15,500.00</td>
-                  </tr>
-                  <tr>
-                    <td class="fw-semibold">20/12/2025</td>
-                    <td><span class="badge bg-success rounded-pill">Depósito</span></td>
-                    <td>ATM Plaza Central</td>
-                    <td class="text-success fw-bold text-end">+$25,000.00</td>
-                  </tr>
-                  <tr>
-                    <td class="fw-semibold">19/12/2025</td>
-                    <td><span class="badge bg-warning rounded-pill">Pago</span></td>
-                    <td>Supermercado La Cosecha</td>
-                    <td class="text-warning fw-bold text-end">-$8,750.50</td>
-                  </tr>
-                  <tr>
-                    <td class="fw-semibold">18/12/2025</td>
-                    <td><span class="badge bg-danger rounded-pill">Transferencia</span></td>
-                    <td>Carlos Rodríguez</td>
-                    <td class="text-danger fw-bold text-end">-$12,000.00</td>
-                  </tr>
-                  <tr>
-                    <td class="fw-semibold">17/12/2025</td>
-                    <td><span class="badge bg-primary rounded-pill">Salario</span></td>
-                    <td>Empresa ABC S.A.</td>
-                    <td class="text-success fw-bold text-end">+$180,000.00</td>
-                  </tr>
-                  <tr>
-                    <td class="fw-semibold">16/12/2025</td>
-                    <td><span class="badge bg-secondary rounded-pill">Comisión</span></td>
-                    <td>Mantenimiento de cuenta</td>
-                    <td class="text-secondary fw-bold text-end">-$2,500.00</td>
-                  </tr>
-                  <tr>
-                    <td class="fw-semibold">15/12/2025</td>
-                    <td><span class="badge bg-danger rounded-pill">Retiro</span></td>
-                    <td>ATM Banco Nacional</td>
-                    <td class="text-danger fw-bold text-end">-$30,000.00</td>
+                    <td colspan="4" class="text-center text-muted py-4">
+                      <i class="fas fa-spinner fa-spin fa-2x mb-2"></i>
+                      <p class="mb-0">Cargando transacciones...</p>
+                    </td>
                   </tr>
                 </tbody>
-              </table>
-            </div>
-          </div>
+                        </table>
+                    </div>
+                </div>
         </div>
       </div>
     </main>
-    <footer class="footer-fixed mt-4">
+    <footer class="sticky-sem-bottom border rounded-2 border-secondary mt-4">
         <p class="mb-0">© 2026 -- Alke Wallet. Sólo para uso práctico educativo.</p>
     </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     
-    <!-- jQuery -->
+    <!-- jQuery debe cargarse ANTES que Bootstrap -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    
+    <!-- Session Management -->
+    <script src="../data/database.js"></script>
+    <script src="../js/sessionManager.js"></script>
+    
+    <!-- Transaction Management -->
+    <script src="../js/transactionManager.js"></script>
+    <script src="../js/transactions.js"></script>
     
     <!-- Sistema de notificaciones AlkeWallet -->
     <script src="../js/notifications.js"></script>

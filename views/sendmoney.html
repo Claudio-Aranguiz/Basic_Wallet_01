@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alke Wallet - Send Money</title>
     <!-- Estilos y tipografía externas -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">  
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,7 +26,7 @@
                 </div>
                 <span class="d-none d-md-inline text-white fw-bold">Mi Perfil</span>
             </a>
-            <button class="navbar-toggler border-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler border-light" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -64,85 +64,262 @@
             </div>
         </div>
     </nav>
-    <main class="row">
-      <h2 class="my-5">Enviar saldo</h2>
-      <div class="col-1"></div>
-      <div class="col-10">
-        <form class="align-items-center text-center" action="/sendmoney" method="post">
-          <div class="mb-3">
-            <label for="sendAmount" class="form-label">Monto a enviar:</label>
-            <input type="number" class="form-control mb-3" id="sendAmount" placeholder="$ 0.00" required />
-            <label class="form-label mt-2">Destinatario:</label>
-            <div class="input-group mb-3 border border-info subtle rounded">
-              <input class="form-control" type="search" placeholder="Buscar contacto" aria-label="Buscar"/>
-              <button class="btn btn-outline-info" type="button">Buscar</button>
+    <main class="container-fluid py-4">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8">
+                <h2 class="mb-4 text-center">Enviar Saldo</h2>
+                
+                <!-- Información del saldo actual -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card border-info">
+                            <div class="card-body text-center">
+                                <h6 class="card-subtitle mb-2 text-muted">Saldo Disponible</h6>
+                                <span class="h4 text-info" id="currentBalance">$0,00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Búsqueda de contactos -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card border-info">
+                            <div class="card-header bg-info text-white">
+                                <h5 class="mb-0">Buscar Contacto</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" id="search-input" placeholder="Buscar por nombre o alias...">
+                                    <button class="btn btn-outline-info" type="button">
+                                        <i class="fas fa-search"></i> Buscar
+                                    </button>
+                                </div>
+                                
+                                <!-- Botón para agregar nuevo contacto -->
+                                <button type="button" class="btn btn-success mb-3 border border-info" data-toggle="modal" data-target="#contactModal">
+                                    <i class="fas fa-user-plus me-2"></i>Agregar nuevo contacto
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lista de contactos -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card border-info">
+                            <div class="card-header bg-info text-white">
+                                <h5 class="mb-0">Seleccionar Contacto</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="contacts-list">
+                                    <!-- Los contactos se cargan dinámicamente aquí -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Información del contacto seleccionado -->
+                <div id="selected-contact-info"></div>
+
+                <!-- Formulario de envío de dinero (visible solo cuando se selecciona contacto) -->
+                <div id="send-money-section">
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card border-success">
+                                <div class="card-header bg-success text-white">
+                                    <h5 class="mb-0">Enviar Saldo</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="send-amount">Monto a enviar *</label>
+                                            <div class="input-group">
+                                                <div class="input-group-text">$</div>
+                                                <input type="number" class="form-control" id="send-amount" min="0.01" max="1000000" step="0.01" 
+                                                       placeholder="0.00" required>
+                                            </div>
+                                            <small class="form-text text-muted">Máximo: $1.000.000</small>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="send-concept">Concepto (opcional)</label>
+                                            <input type="text" class="form-control" id="send-concept" 
+                                                   placeholder="Descripción del envío" maxlength="100">
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-primary btn-lg border border-info" id="btn-send-money" disabled>
+                                        <i class="fas fa-paper-plane me-2"></i>Realizar envío
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Área de mensajes de confirmación -->
+                <div id="confirmation-message"></div>
             </div>
-            <button type="submit" class="btn btn-primary my-3 mx-2 border border-info">Realizar envío</button>
-            <button type="button" class="btn btn-success my-3 mx-2 border border-info" data-bs-toggle="modal" data-bs-target="#contactModal">Agregar nuevo contacto</button>
-          </div>
-        </form> 
-      </div>
-      <div class="col-1"></div>
+        </div>
     </main>
         <!-- Modal para agregar nuevo contacto -->
     <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="contactModalLabel">Agregar Nuevo Contacto</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          <div class="modal-header bg-info text-white">
+            <h1 class="modal-title fs-5" id="contactModalLabel">
+              <i class="fas fa-user-plus me-2"></i>Agregar Nuevo Contacto
+            </h1>
+            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar">
+                <span aria-hidden="true">&times;</span>
+            </button>
           </div>
           <div class="modal-body">
             <form id="contactForm">
-              <div class="mb-3">
-                <label for="contactName" class="form-label fw-bold">Nombre completo:</label>
-                <input type="text" class="form-control" id="contactName" placeholder="Ej: Juan Pérez" required>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="contactName" class="form-label fw-bold">
+                    Nombre y apellido: <span class="text-danger">*</span>
+                  </label>
+                  <input type="text" class="form-control" id="contactName" placeholder="Ej: Juan Pérez" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="contactAlias" class="form-label fw-bold">
+                    Alias: <span class="text-danger">*</span>
+                  </label>
+                  <input type="text" class="form-control" id="contactAlias" placeholder="Ej: JUAN.PEREZ.CUENTA" required>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="contactCBU" class="form-label fw-bold">
+                    Número de CBU: <span class="text-danger">*</span>
+                  </label>
+                  <input type="text" class="form-control" id="contactCBU" placeholder="Ej: 1234567890123456789012" maxlength="22" required>
+                  <div class="form-text">22 dígitos del CBU</div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="contactBank" class="form-label fw-bold">
+                    Nombre del Banco: <span class="text-danger">*</span>
+                  </label>
+                  <select class="form-select" id="contactBank" required>
+                    <option value="" selected>Seleccionar banco</option>
+                    <option value="Banco Nacional">Banco Nacional</option>
+                    <option value="Banco del Pato">Banco del Pato</option>
+                    <option value="Banco Santander">Banco Santander</option>
+                    <option value="Banco Americano">Banco Americano</option>
+                    <option value="Banco Euro">Banco Euro</option>
+                  </select>
+                </div>
               </div>
               <div class="mb-3">
-                <label for="contactPhone" class="form-label fw-bold">Teléfono:</label>
-                <input type="tel" class="form-control" id="contactPhone" placeholder="Ej: +1234567890" required>
+                <label for="contactPhone" class="form-label">Teléfono:</label>
+                <input type="tel" class="form-control" id="contactPhone" placeholder="Ej: +1234567890">
               </div>
               <div class="mb-3">
-                <label for="contactEmail" class="form-label fw-bold">Email:</label>
-                <input type="email" class="form-control" id="contactEmail" placeholder="ejemplo@correo.com" required>
-              </div>
-              <div class="mb-3">
-                <label for="contactAccount" class="form-label fw-bold">Número de cuenta:</label>
-                <input type="text" class="form-control" id="contactAccount" placeholder="Ej: 1234-5678-9012" required>
-              </div>
-              <div class="mb-3">
-                <label for="contactBank" class="form-label">Banco:</label>
-                <select class="form-select" id="contactBank" required>
-                  <option value="" selected>Seleccionar banco</option>
-                  <option value="banco1">Banco Nacional</option>
-                  <option value="banco2">Banco del Pato</option>
-                  <option value="banco3">Banco Shantander</option>
-                  <option value="banco4">Banco Americano</option>
-                  <option value="banco5">Banco Euro</option>
-                </select>
+                <label for="contactEmail" class="form-label">Email:</label>
+                <input type="email" class="form-control" id="contactEmail" placeholder="ejemplo@correo.com">
               </div>
               <div class="form-check mb-3">
                 <input class="form-check-input" type="checkbox" id="addToFavorites">
                 <label class="form-check-label" for="addToFavorites">
-                  Agregar a favoritos
+                  ⭐ Agregar a favoritos
                 </label>
+              </div>
+              <div class="alert alert-info d-flex align-items-center" role="alert">
+                <i class="fas fa-info-circle me-2"></i>
+                <div>
+                  Los campos marcados con <span class="text-danger">*</span> son obligatorios.
+                </div>
               </div>
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="submit" form="contactForm" class="btn btn-success">Guardar Contacto</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+              <i class="fas fa-times me-2"></i>Cancelar
+            </button>
+            <button type="submit" form="contactForm" class="btn btn-success">
+              <i class="fas fa-save me-2"></i>Guardar Contacto
+            </button>
           </div>
         </div>
       </div>
     </div>
+    
+    <!-- Modal de transferencia exitosa -->
+    <div class="modal fade" id="transferSuccessModal" tabindex="-1" aria-labelledby="transferSuccessModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="transferSuccessModalLabel">
+                      <i class="fas fa-check-circle me-2"></i>¡Transferencia Exitosa!
+                    </h5>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-check-circle text-success modal-icon-large"></i>
+                    </div>
+                    <div id="transferDetails" class="mb-3">
+                        <!-- Los detalles se llenan dinámicamente -->
+                    </div>
+                    <div class="progress mb-2 transfer-progress-bar">
+                        <div id="transferRedirectProgress" class="progress-bar bg-success transfer-progress-initial" role="progressbar"></div>
+                    </div>
+                    <p class="mt-2 text-muted">Redirigiendo al menú principal...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de error de transferencia -->
+    <div class="modal fade" id="transferErrorModal" tabindex="-1" aria-labelledby="transferErrorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="transferErrorModalLabel">
+                      <i class="fas fa-exclamation-triangle me-2"></i>Error en Transferencia
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-exclamation-triangle text-danger modal-icon-large"></i>
+                    </div>
+                    <p id="transferErrorMessage" class="mb-3">
+                        <!-- El mensaje se llena dinámicamente -->
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                      <i class="fas fa-times me-2"></i>Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <footer class="sticky-sem-bottom border rounded-2 border-secondary mt-4">
         <small>© 2026 -- Alke Wallet. </small>
     </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     
-    <!-- jQuery -->
+    <!-- jQuery debe cargarse ANTES que Bootstrap -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    
+    <!-- Session Management -->
+    <script src="../data/database.js"></script>
+    <script src="../js/sessionManager.js"></script>
+    
+    <!-- Transaction Management -->
+    <script src="../js/transactionManager.js"></script>
+    
+    <!-- Scripts modulares -->
+    <script src="../js/contactManager.js"></script>
+    <script src="../js/sendMoney.js"></script>
     
     <!-- Sistema de notificaciones AlkeWallet -->
     <script src="../js/notifications.js"></script>

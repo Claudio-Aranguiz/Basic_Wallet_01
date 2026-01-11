@@ -9,33 +9,13 @@ class UserRegistration {
     // Cargar la base de datos JSON
     async loadDatabase() {
         try {
-            // Intentar diferentes rutas para la base de datos
-            let response;
-            const possiblePaths = [
-                '../database.json',           // Desde views/
-                './database.json',            // Desde raíz
-                '/database.json',             // Ruta absoluta
-                'database.json'               // Mismo directorio
-            ];
-            
-            for (const path of possiblePaths) {
-                try {
-                    response = await fetch(path);
-                    if (response.ok) {
-                        console.log(`Base de datos para registro encontrada en: ${path}`);
-                        break;
-                    }
-                } catch (e) {
-                    continue;
-                }
+            // Usar la variable global DATABASE cargada desde database.js
+            if (window.DATABASE) {
+                this.database = window.DATABASE;
+                console.log('✅ Database cargada desde database.js para registro:', this.database.users.length, 'usuarios');
+            } else {
+                throw new Error('window.DATABASE no está disponible');
             }
-            
-            if (!response || !response.ok) {
-                throw new Error('No se pudo encontrar database.json en ninguna ruta');
-            }
-            
-            this.database = await response.json();
-            console.log('Base de datos cargada para registro');
         } catch (error) {
             console.error('Error al cargar la base de datos:', error);
             console.warn('Usando datos de fallback para registro');

@@ -1,4 +1,6 @@
-{
+// Base de datos de AlkeWallet
+// Archivo JavaScript para evitar problemas de CORS en desarrollo local
+window.DATABASE = {
   "users": [
     {
       "id": 1,
@@ -194,4 +196,6 @@
       "timestamp": "2025-01-02T16:10:00Z"
     }
   ]
-}
+};
+
+console.log('📄 Database.js cargado correctamente');
