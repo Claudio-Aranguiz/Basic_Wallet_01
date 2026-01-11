@@ -12,7 +12,8 @@ class SessionManager {
         this.database = null;
         this.currentUser = null;
         this.isAuthenticated = false;
-        this.initializeSession();
+        this.isReady = false;
+        this.readyPromise = this.initializeSession();
     }
 
     // Inicializar sesión al cargar la página
@@ -22,9 +23,12 @@ class SessionManager {
             await this.loadUserSession();
             this.updateUserDisplay();
             this.checkPageAccess();
+            this.isReady = true;
             console.log('✅ SessionManager inicializado correctamente');
+            return true;
         } catch (error) {
             console.error('❌ Error inicializando SessionManager:', error);
+            return false;
         }
     }
 
@@ -201,9 +205,13 @@ class SessionManager {
         });
     }
 
-    // Formatear moneda
+    // Formatear moneda (Estándar COP para toda la app)
     formatCurrency(amount) {
-        return `$${parseInt(amount).toLocaleString('es-CL')}`;
+        return parseInt(amount).toLocaleString('es-CO', {
+            style: 'currency',
+            currency: 'COP',
+            minimumFractionDigits: 0
+        });
     }
 
     // Verificar acceso a página

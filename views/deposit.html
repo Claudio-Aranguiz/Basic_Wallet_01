@@ -13,14 +13,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/mobile.css">
+    <link rel="stylesheet" href="../css/tablet-desktop.css">
+    <link rel="stylesheet" href="../css/modals-alerts.css">
 </head>
 <body class="landing-page-bg">
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background-color: rgba(44, 62, 80, 0.9); backdrop-filter: blur(5px);">
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top glass-navbar">
         <div class="container-fluid">
             <!-- Avatar/Portrait del usuario (futuro acceso a perfil) -->
             <a class="navbar-brand d-flex align-items-center" href="javascript:void(0)" title="Ir al perfil de usuario">
                 <div class="user-avatar mr-2">
-                    <div class="rounded-circle d-flex align-items-center justify-content-center user-avatar-circle" style="background-color: rgba(255,255,255,0.1);">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center user-avatar-circle bg-white-translucent">
                         <i class="fas fa-user text-info fs-5"></i>
                     </div>
                 </div>
@@ -50,7 +53,9 @@
                 
                 <!-- Botón de notificaciones -->
                 <button class="btn btn-outline-light btn-sm mr-3 position-relative" 
-                        onclick="showNotification('No hay notificaciones nuevas', 'info', 'Notificaciones')" title="Notificaciones">
+                        onclick="showNotification('No hay notificaciones nuevas', 'info', 'Notificaciones')" 
+                        title="Notificaciones"
+                        aria-label="Ver notificaciones">
                     <i class="fas fa-bell"></i>
                     <span class="notification-badge bg-danger">2</span>
                 </button>
@@ -95,7 +100,7 @@
           
           <div class="col-md-6 mb-4">
             <!-- Formulario para ingresar monto manualmente -->
-            <div class="card h-100 shadow-sm border-0" style="background-color: rgba(255,255,255,0.05) !important;">
+            <div class="card h-100 shadow-sm border-0 bg-white-translucent-low">
               <div class="card-body">
                 <i class="fas fa-money-bill-wave fa-3x text-success mb-3 d-block text-center"></i>
                 <h5 class="card-title text-center mb-4">Depósito Manual</h5>
@@ -104,7 +109,7 @@
                     <label for="depositAmount" class="form-label fw-bold">Monto a Depositar:</label>
                     <div class="input-group">
                       <span class="input-group-text bg-transparent text-success border-secondary">$</span>
-                      <input type="number" class="form-control bg-transparent text-white border-secondary" id="depositAmount" placeholder="10,000" min="1000" max="5000000" step="1" required>
+                      <input type="text" class="form-control bg-transparent text-white border-secondary" id="depositAmount" placeholder="10,000" required data-validate="amount">
                     </div>
                     <small class="form-text text-muted">Mínimo: $1,000 - Máximo: $5,000,000</small>
                   </div>
@@ -130,7 +135,7 @@
 
         <!-- Información adicional -->
         <section class="deposit-info mt-4">
-          <div class="alert border-info text-info mb-0" role="alert" style="background-color: rgba(0,0,0,0.3) !important;">
+          <div class="alert border-info text-info mb-0 bg-dark-translucent" role="alert">
             <div class="d-flex align-items-center mb-2">
                 <i class="fas fa-info-circle mr-2 fw-bold"></i>
                 <h6 class="mb-0 fw-bold">Información importante:</h6>
@@ -159,6 +164,7 @@
     
     <!-- Transaction Management -->
     <script src="../js/transactionManager.js"></script>
+    <script src="../js/validation.js"></script>
     <script src="../js/depositManager.js"></script>
     
     <!-- Sistema de notificaciones AlkeWallet -->

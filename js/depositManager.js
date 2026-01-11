@@ -14,47 +14,31 @@ class DepositManager {
     async init() {
         console.log('💰 Inicializando DepositManager');
 
-        // Verificar dependencias
-        if (!window.sessionManager) {
-            console.error('❌ SessionManager no disponible');
-            return;
-        }
-
-        if (!window.transactionManager) {
-            console.error('❌ TransactionManager no disponible');
-            return;
-        }
-
         // Obtener usuario actual
-        this.currentUser = window.sessionManager.getCurrentUser();
+        if (window.sessionManager) {
+            await window.sessionManager.readyPromise;
+            this.currentUser = window.sessionManager.getCurrentUser();
+            this.database = window.sessionManager.database || window.DATABASE;
+        }
+
         if (!this.currentUser) {
             console.error('❌ No hay usuario logueado');
-            window.location.href = './login.html';
-            return;
-        }
-
-        // Obtener database
-        this.database = window.sessionManager.database || window.DATABASE;
-        if (!this.database) {
-            console.error('❌ Database no disponible');
+            if (!window.location.pathname.includes('login.html')) {
+                window.location.href = './login.html';
+            }
             return;
         }
 
         this.isInitialized = true;
-        console.log('✅ DepositManager inicializado correctamente');
+        console.log('✅ DepositManager inicializado');
 
-        // Actualizar saldo en la interfaz
+        // Actualizar UI
         this.updateBalanceDisplay();
-
-        // Configurar event listeners
         this.setupEventListeners();
     }
 
     // Configurar event listeners
     setupEventListeners() {
-        console.log('🎯 Configurando event listeners');
-
-        // Formulario de depósito
         const depositForm = document.getElementById('depositForm');
         if (depositForm) {
             depositForm.addEventListener('submit', (e) => {
@@ -63,25 +47,15 @@ class DepositManager {
             });
         }
 
-        // Validación en tiempo real del monto
         const amountInput = document.getElementById('depositAmount');
         if (amountInput) {
-            amountInput.addEventListener('input', (e) => {
-                this.validateAmount(e.target.value);
-            });
-
-            // Formatear entrada
-            amountInput.addEventListener('blur', (e) => {
-                this.formatAmountInput(e.target);
-            });
+            amountInput.addEventListener('input', (e) => this.validateAmount(e.target.value));
+            amountInput.addEventListener('blur', (e) => this.formatAmountInput(e.target));
         }
 
-        // Botón QR (simulado)
         const qrBtn = document.getElementById('scanQRBtn');
         if (qrBtn) {
-            qrBtn.addEventListener('click', () => {
-                this.handleQRScan();
-            });
+            qrBtn.addEventListener('click', () => this.handleQRScan());
         }
     }
 
@@ -89,15 +63,12 @@ class DepositManager {
     updateBalanceDisplay() {
         try {
             const balanceElement = document.querySelector('.current-balance h2');
-            if (balanceElement && this.currentUser) {
-                // Obtener saldo calculado por TransactionManager
-                const currentBalance = window.transactionManager.calculateUserBalance(this.currentUser.email);
-                const formattedBalance = currentBalance.toLocaleString('es-CO', {
-                    style: 'currency',
-                    currency: 'COP'
-                });
-                balanceElement.textContent = formattedBalance;
-                console.log('💰 Saldo actualizado:', formattedBalance);
+            if (balanceElement && this.currentUser && window.sessionManager) {
+                const currentBalance = window.transactionManager ?
+                    window.transactionManager.calculateUserBalance(this.currentUser.email) :
+                    this.currentUser.balance;
+
+                balanceElement.textContent = window.sessionManager.formatCurrency(currentBalance);
             }
         } catch (error) {
             console.error('❌ Error actualizando saldo:', error);
@@ -107,11 +78,8 @@ class DepositManager {
     // Validar monto de depósito
     validateAmount(amount) {
         const amountInput = document.getElementById('depositAmount');
-        const submitBtn = document.querySelector('#depositForm button[type="submit"]');
-
         let isValid = true;
         let errorMessage = '';
-
         const numAmount = parseFloat(amount);
 
         if (!amount || isNaN(numAmount)) {
@@ -125,13 +93,10 @@ class DepositManager {
             errorMessage = 'El monto máximo de depósito es $5,000,000';
         }
 
-        // Actualizar estilos del input
         if (amountInput) {
             if (amount && !isValid) {
                 amountInput.classList.add('is-invalid');
                 amountInput.classList.remove('is-valid');
-
-                // Mostrar mensaje de error
                 let feedback = amountInput.parentNode.parentNode.querySelector('.invalid-feedback');
                 if (!feedback) {
                     feedback = document.createElement('div');
@@ -142,8 +107,6 @@ class DepositManager {
             } else if (amount && isValid) {
                 amountInput.classList.add('is-valid');
                 amountInput.classList.remove('is-invalid');
-
-                // Remover mensaje de error
                 const feedback = amountInput.parentNode.parentNode.querySelector('.invalid-feedback');
                 if (feedback) feedback.remove();
             } else {
@@ -158,8 +121,7 @@ class DepositManager {
     formatAmountInput(input) {
         const value = input.value;
         if (value && !isNaN(value)) {
-            const numValue = parseFloat(value);
-            input.value = Math.round(numValue); // Sin decimales para pesos colombianos
+            input.value = Math.round(parseFloat(value));
         }
     }
 
@@ -173,28 +135,22 @@ class DepositManager {
         const amountInput = document.getElementById('depositAmount');
         const methodSelect = document.getElementById('depositMethod');
 
-        if (!amountInput || !methodSelect) {
-            this.showError('Error en el formulario');
-            return;
-        }
+        if (!amountInput || !methodSelect) return;
 
         const amount = parseFloat(amountInput.value);
         const method = methodSelect.value;
 
-        // Validar campos
         if (!amount || !method) {
             this.showError('Por favor, completa todos los campos requeridos');
             return;
         }
 
-        // Validar monto
         const validation = this.validateAmount(amount);
         if (!validation.isValid) {
             this.showError(validation.errorMessage);
             return;
         }
 
-        // Mostrar modal de confirmación
         this.showDepositModal(amount, method);
     }
 
@@ -208,18 +164,14 @@ class DepositManager {
             'cash': 'Efectivo - Sucursal'
         };
 
-        const formattedAmount = amount.toLocaleString('es-CO', {
-            style: 'currency',
-            currency: 'COP'
-        });
+        const formattedAmount = window.sessionManager.formatCurrency(amount);
 
-        // Crear modal dinámicamente
         const modalHTML = `
-        <div class="modal fade" id="depositConfirmModal" tabindex="-1" role="dialog" aria-labelledby="depositConfirmModalLabel" aria-hidden="true">
+        <div class="modal fade" id="depositConfirmModal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content bg-dark text-white border-info shadow-lg" style="backdrop-filter: blur(15px); background-color: rgba(30, 45, 60, 0.95) !important;">
+                <div class="modal-content text-white border-info shadow-lg glass-modal-content">
                     <div class="modal-header border-0 pb-0">
-                        <h5 class="modal-title text-info fw-bold" id="depositConfirmModalLabel">
+                        <h5 class="modal-title text-info fw-bold">
                             <i class="fas fa-plus-circle mr-2"></i>Confirmar Depósito
                         </h5>
                         <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
@@ -228,15 +180,14 @@ class DepositManager {
                     </div>
                     <div class="modal-body text-center pt-4">
                         <div class="mb-4">
-                            <div class="rounded-circle bg-info d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px; background-color: rgba(23, 162, 184, 0.2) !important;">
+                            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3 bg-deposit-accent icon-circle-lg">
                                 <i class="fas fa-money-bill-wave fa-2x text-info"></i>
                             </div>
                             <h2 class="text-white fw-bold">${formattedAmount}</h2>
                             <p class="text-muted italic">Monto a depositar</p>
                         </div>
-                        
                         <div class="row text-start px-3">
-                            <div class="col-12 p-3 rounded-3" style="background-color: rgba(255,255,255,0.05);">
+                            <div class="col-12 p-3 rounded-3 bg-white-translucent-low">
                                 <div class="d-flex justify-content-between mb-2">
                                     <span class="text-muted">Método:</span>
                                     <span class="fw-bold text-info">${methodNames[method] || method}</span>
@@ -251,81 +202,47 @@ class DepositManager {
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="mt-4 px-3">
-                            <p class="small text-muted mb-0">
-                                <i class="fas fa-info-circle mr-1 text-info"></i>
-                                Los fondos estarán disponibles en tu cuenta tras confirmar.
-                            </p>
-                        </div>
                     </div>
                     <div class="modal-footer border-0 justify-content-center pb-4">
-                        <button type="button" class="btn btn-outline-light px-4" data-dismiss="modal">
-                            Cancelar
-                        </button>
-                        <button type="button" class="btn btn-info px-4 fw-bold" id="confirmDepositBtn">
-                            Confirmar Depósito
-                        </button>
+                        <button type="button" class="btn btn-outline-light px-4" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-info px-4 fw-bold" id="confirmDepositBtn">Confirmar Depósito</button>
                     </div>
                 </div>
             </div>
-        </div>
-        `;
+        </div>`;
 
-        // Agregar modal al DOM si no existe
         let existingModal = document.getElementById('depositConfirmModal');
-        if (existingModal) {
-            existingModal.remove();
-        }
+        if (existingModal) existingModal.remove();
 
         document.body.insertAdjacentHTML('beforeend', modalHTML);
-
-        // Configurar evento del botón confirmar
-        document.getElementById('confirmDepositBtn').addEventListener('click', () => {
-            this.executeDeposit(amount, method);
-        });
-
-        // Mostrar modal
+        document.getElementById('confirmDepositBtn').addEventListener('click', () => this.executeDeposit(amount, method));
         $('#depositConfirmModal').modal('show');
     }
 
-    // Ejecutar depósito real
+    // Ejecutar depósito
     async executeDeposit(amount, method) {
         const confirmBtn = document.getElementById('confirmDepositBtn');
+        if (!confirmBtn) return;
+
         const originalBtnText = confirmBtn.innerHTML;
 
         try {
-            // Mostrar loading
             confirmBtn.disabled = true;
             confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Procesando...';
 
-            // Simular procesamiento (en una app real, aquí iría la API)
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            await new Promise(resolve => setTimeout(resolve, 1500));
 
-            // Actualizar saldo del usuario
             this.currentUser.balance += amount;
 
-            // Actualizar en sessionManager
             if (window.sessionManager) {
                 window.sessionManager.currentUser.balance = this.currentUser.balance;
                 window.sessionManager.saveUserSession();
             }
 
-            // Actualizar en database
-            if (this.database && window.DATABASE) {
-                const userIndex = window.DATABASE.users.findIndex(u => u.id === this.currentUser.id);
-                if (userIndex !== -1) {
-                    window.DATABASE.users[userIndex].balance = this.currentUser.balance;
-                }
-            }
-
-            // Registrar transacción en TransactionManager
             if (window.transactionManager) {
                 const methodNames = {
-                    'bank': 'Depósito vía transferencia bancaria',
-                    'card': 'Depósito vía tarjeta',
-                    'paypal': 'Depósito vía PayPal',
-                    'crypto': 'Depósito vía criptomoneda',
+                    'bank': 'Depósito vía transferencia bancaria', 'card': 'Depósito vía tarjeta',
+                    'paypal': 'Depósito vía PayPal', 'crypto': 'Depósito vía criptomoneda',
                     'cash': 'Depósito en efectivo - Sucursal'
                 };
 
@@ -333,26 +250,15 @@ class DepositManager {
                     userId: this.currentUser.email,
                     type: 'deposit',
                     description: methodNames[method] || `Depósito - ${method}`,
-                    amount: amount, // Positivo porque es un ingreso
+                    amount: amount,
                     status: 'completed'
                 });
-
-                console.log('📊 Transacción de depósito registrada');
             }
 
-            // Cerrar modal
             $('#depositConfirmModal').modal('hide');
-
-            // Mostrar éxito
-            this.showSuccess(amount, method);
-
-            // Limpiar formulario
+            this.showSuccess(amount);
             this.clearForm();
-
-            // Actualizar saldo mostrado
             this.updateBalanceDisplay();
-
-            console.log('✅ Depósito exitoso:', amount);
 
         } catch (error) {
             console.error('❌ Error ejecutando depósito:', error);
@@ -362,40 +268,20 @@ class DepositManager {
         }
     }
 
-    // Mostrar mensaje de éxito
-    showSuccess(amount, method) {
-        const methodNames = {
-            'bank': 'transferencia bancaria',
-            'card': 'tarjeta',
-            'paypal': 'PayPal',
-            'crypto': 'criptomoneda',
-            'cash': 'efectivo'
-        };
-
-        const formattedAmount = amount.toLocaleString('es-CO', {
-            style: 'currency',
-            currency: 'COP'
-        });
-
-        const message = `¡Depósito exitoso!\n\nSe han depositado ${formattedAmount} mediante ${methodNames[method]}\n\nTu saldo ha sido actualizado correctamente.`;
-
-        // Usar solo notificaciones para evitar redundancia
+    // Mostrar éxito
+    showSuccess(amount) {
         if (typeof showNotification === 'function') {
-            showNotification(
-                `Depósito de ${formattedAmount} realizado exitosamente`,
-                'success',
-                'Depósito Exitoso'
-            );
+            const formattedAmount = window.sessionManager.formatCurrency(amount);
+            showNotification(`Depósito de ${formattedAmount} realizado exitosamente`, 'success', 'Depósito Exitoso');
         }
     }
 
-    // Mostrar mensaje de error
+    // Mostrar error
     showError(message) {
-        console.error('❌ Error:', message);
-        alert('Error: ' + message);
-
         if (typeof showNotification === 'function') {
             showNotification(message, 'error', 'Error en Depósito');
+        } else {
+            console.error('❌ Error:', message);
         }
     }
 
@@ -404,52 +290,20 @@ class DepositManager {
         const form = document.getElementById('depositForm');
         if (form) {
             form.reset();
-
-            // Limpiar clases de validación
-            const inputs = form.querySelectorAll('.form-control, .form-select');
-            inputs.forEach(input => {
-                input.classList.remove('is-valid', 'is-invalid');
-            });
-
-            // Remover mensajes de error
-            const feedbacks = form.querySelectorAll('.invalid-feedback');
-            feedbacks.forEach(feedback => feedback.remove());
+            form.querySelectorAll('.is-valid, .is-invalid').forEach(el => el.classList.remove('is-valid', 'is-invalid'));
+            form.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
         }
     }
 
-    // Manejar escaneo QR simulado
+    // Manejar escaneo QR
     handleQRScan() {
-        const qrBtn = document.getElementById('scanQRBtn');
-        if (!qrBtn) return;
-
-        const originalText = qrBtn.innerHTML;
-        qrBtn.disabled = true;
-        qrBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Iniciando cámara...';
-
-        setTimeout(() => {
-            qrBtn.disabled = false;
-            qrBtn.innerHTML = originalText;
-
-            alert('🚧 Funcionalidad de escáner QR en desarrollo.\n\nPor favor, usa el depósito manual por ahora.');
-
-            if (typeof showNotification === 'function') {
-                showNotification(
-                    'Funcionalidad en desarrollo. Usa el depósito manual.',
-                    'info',
-                    'QR Scanner'
-                );
-            }
-        }, 1500);
+        if (typeof showNotification === 'function') {
+            showNotification('Funcionalidad en desarrollo. Usa el depósito manual.', 'info', 'QR Scanner 🚧');
+        }
     }
 }
 
-// Crear instancia global
-window.depositManager = null;
-
-// Inicializar cuando el DOM esté listo
+// Inicializar
 document.addEventListener('DOMContentLoaded', () => {
     window.depositManager = new DepositManager();
-    console.log('✅ DepositManager expuesto globalmente');
 });
-
-console.log('🎯 DepositManager cargado');

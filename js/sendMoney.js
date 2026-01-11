@@ -16,19 +16,16 @@ class SendMoneyManager {
     // Inicializar desde sessionManager
     async initializeFromSession() {
         try {
-            if (window.sessionManager && window.sessionManager.database) {
+            if (window.sessionManager) {
+                await window.sessionManager.readyPromise;
+
                 this.database = window.sessionManager.database;
                 this.currentUser = window.sessionManager.currentUser;
 
                 if (this.currentUser) {
                     this.loadTransactions();
-                    console.log('✅ SendMoneyManager inicializado para usuario:', this.currentUser.firstName);
-                } else {
-                    console.error('❌ Usuario no encontrado en sessionManager');
+                    console.log('✅ SendMoneyManager inicializado');
                 }
-            } else {
-                console.log('⏳ Esperando SessionManager para SendMoney...');
-                setTimeout(() => this.initializeFromSession(), 1000);
             }
         } catch (error) {
             console.error('❌ Error inicializando SendMoneyManager:', error);
@@ -155,16 +152,89 @@ class SendMoneyManager {
         this.showConfirmationDialog(selectedContact, amount, concept);
     }
 
-    // Mostrar diálogo de confirmación
+    // Mostrar diálogo de confirmación (Modal Personalizado)
     showConfirmationDialog(contact, amount, concept) {
-        const confirmMessage = `¿Confirma la transferencia de $${amount.toLocaleString('es-CL', {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0
-        })} a ${contact.name}?\n\nConcepto: ${concept}`;
+        const formattedAmount = window.sessionManager.formatCurrency(amount);
 
-        if (confirm(confirmMessage)) {
-            this.executeTransfer(contact, amount, concept);
+        // Crear modal dinámicamente con estilo Glassmorphism (consistente con depositManager)
+        const modalHTML = `
+        <div class="modal fade" id="transferConfirmModal" tabindex="-1" role="dialog" aria-labelledby="transferConfirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content text-white border-primary shadow-lg glass-modal-content">
+                    <div class="modal-header border-0 pb-0">
+                        <h5 class="modal-title text-primary fw-bold" id="transferConfirmModalLabel">
+                            <i class="fas fa-paper-plane mr-2"></i>Confirmar Transferencia
+                        </h5>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-center pt-4">
+                        <div class="mb-4">
+                            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3 bg-send-accent icon-circle-lg">
+                                <i class="fas fa-exchange-alt fa-2x text-primary"></i>
+                            </div>
+                            <h2 class="text-white fw-bold">${formattedAmount}</h2>
+                            <p class="text-muted italic">Monto a enviar</p>
+                        </div>
+                        
+                        <div class="row text-start px-3">
+                            <div class="col-12 p-3 rounded-3 bg-white-translucent-low">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted">Destinatario:</span>
+                                    <span class="fw-bold text-white">${contact.name}</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted">Email:</span>
+                                    <span class="text-muted small">${contact.email}</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted">Concepto:</span>
+                                    <span class="text-white">${concept}</span>
+                                </div>
+                                <div class="d-flex justify-content-between mt-3 pt-2 border-top border-secondary">
+                                    <span class="text-muted">Comisión:</span>
+                                    <span class="text-success fw-bold">Gratis</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 justify-content-center pb-4">
+                        <button type="button" class="btn btn-outline-light px-4" data-dismiss="modal">
+                            Cancelar
+                        </button>
+                        <button type="button" class="btn btn-primary px-4 fw-bold" id="confirmTransferBtn">
+                            Enviar Dinero
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+
+        // Agregar modal al DOM si no existe
+        let existingModal = document.getElementById('transferConfirmModal');
+        if (existingModal) {
+            existingModal.remove();
         }
+
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+        // Configurar evento del botón confirmar
+        document.getElementById('confirmTransferBtn').addEventListener('click', () => {
+            const btn = document.getElementById('confirmTransferBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Enviando...';
+
+            // Cerrar modal y ejecutar
+            setTimeout(() => {
+                $('#transferConfirmModal').modal('hide');
+                this.executeTransfer(contact, amount, concept);
+            }, 1000);
+        });
+
+        // Mostrar modal
+        $('#transferConfirmModal').modal('show');
     }
 
     // Ejecutar transferencia REAL
@@ -270,18 +340,24 @@ class SendMoneyManager {
 
     // Mostrar mensaje de éxito
     showSuccess(contact, amount, transactionCode) {
+        const formattedAmount = window.sessionManager.formatCurrency(amount);
+
         // Usar solo notificaciones para evitar redundancia
         if (typeof showNotification === 'function') {
-            showNotification(`Transferencia de $${amount.toLocaleString('es-CL')} enviada a ${contact.name}`, 'success', 'Transferencia Exitosa');
+            showNotification(
+                `Transferencia de ${formattedAmount} enviada exitosamente a ${contact.name}`,
+                'success',
+                'Transferencia Exitosa'
+            );
         }
     }
 
     // Mostrar mensaje de error
     showError(message) {
-        alert('❌ Error: ' + message);
-
         if (typeof showNotification === 'function') {
             showNotification(message, 'error', 'Error en Transferencia');
+        } else {
+            console.error('❌ Error de transferencia:', message);
         }
     }
 

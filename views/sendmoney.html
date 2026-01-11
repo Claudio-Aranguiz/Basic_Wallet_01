@@ -13,14 +13,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/mobile.css">
+    <link rel="stylesheet" href="../css/tablet-desktop.css">
+    <link rel="stylesheet" href="../css/modals-alerts.css">
 </head>
 <body class="landing-page-bg">
-  <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background-color: rgba(44, 62, 80, 0.9); backdrop-filter: blur(5px);">
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top glass-navbar">
         <div class="container-fluid">
             <!-- Avatar/Portrait del usuario (futuro acceso a perfil) -->
             <a class="navbar-brand d-flex align-items-center" href="javascript:void(0)" title="Ir al perfil de usuario">
                 <div class="user-avatar mr-2">
-                    <div class="rounded-circle d-flex align-items-center justify-content-center user-avatar-circle" style="background-color: rgba(255,255,255,0.1);">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center user-avatar-circle bg-white-translucent">
                         <i class="fas fa-user text-info fs-5"></i>
                     </div>
                 </div>
@@ -51,7 +54,8 @@
                 <!-- Botón de notificaciones -->
                 <button class="btn btn-outline-light btn-sm mr-2 position-relative" 
                         onclick="showNotification('No hay notificaciones nuevas', 'info', 'Notificaciones')" 
-                        title="Notificaciones">
+                        title="Notificaciones"
+                        aria-label="Ver notificaciones">
                     <i class="fas fa-bell"></i>
                     <span class="notification-badge bg-danger">2</span>
                 </button>
@@ -90,7 +94,7 @@
                                 <div class="card-body">
                                     <div class="input-group mb-4">
                                         <input type="text" class="form-control bg-transparent text-white border-secondary" id="search-input" placeholder="Nombre o alias...">
-                                        <button class="btn btn-outline-info" type="button">
+                                        <button class="btn btn-outline-info" type="button" title="Buscar contacto" aria-label="Buscar contacto">
                                             <i class="fas fa-search"></i>
                                         </button>
                                     </div>
@@ -110,7 +114,7 @@
                                     <h5 class="mb-0 small"><i class="fas fa-list mr-2"></i>SELECCIONAR</h5>
                                 </div>
                                 <div class="card-body p-0">
-                                    <div id="contacts-list" class="overflow-auto" style="max-height: 250px;">
+                                    <div id="contacts-list" class="overflow-auto overflow-auto-limit">
                                         <!-- Los contactos se cargan dinámicamente aquí -->
                                     </div>
                                 </div>
@@ -123,15 +127,15 @@
 
                     <!-- Formulario de envío de dinero -->
                     <div id="send-money-section">
-                        <div class="card border-info" style="border-style: dashed !important;">
+                        <div class="card border-info border-dashed">
                             <div class="card-body p-4">
                                 <div class="row text-start">
                                     <div class="col-md-6 mb-3">
                                         <label for="send-amount" class="fw-bold">Monto a enviar *</label>
                                         <div class="input-group">
                                             <div class="input-group-text bg-transparent text-info border-secondary">$</div>
-                                            <input type="number" class="form-control bg-transparent text-white border-secondary" id="send-amount" min="0.01" max="1000000" step="0.01" 
-                                                   placeholder="0.00" required>
+                                            <input type="text" class="form-control bg-transparent text-white border-secondary" id="send-amount" 
+                                                   placeholder="0.00" required data-validate="amount">
                                         </div>
                                         <small class="text-muted">Límite diario: $1.000.000</small>
                                     </div>
@@ -157,10 +161,10 @@
         <!-- Modal para agregar nuevo contacto -->
     <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
-        <div class="modal-content bg-dark text-white border-info shadow-lg" style="backdrop-filter: blur(15px); background-color: rgba(30, 45, 60, 0.95) !important;">
+        <div class="modal-content text-white border-info shadow-lg glass-modal-content">
           <div class="modal-header border-0 pb-0">
             <h4 class="modal-title text-info fw-bold" id="contactModalLabel">Agregar Nuevo Contacto</h4>
-            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar">
+            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar" title="Cerrar modal">
                 <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -171,7 +175,7 @@
                   <label for="contactName" class="form-label fw-bold">
                     Nombre y apellido: <span class="text-danger">*</span>
                   </label>
-                  <input type="text" class="form-control" id="contactName" placeholder="Ej: Juan Pérez" required>
+                  <input type="text" class="form-control" id="contactName" placeholder="Ej: Juan Pérez" required data-validate="name">
                 </div>
                 <div class="col-md-6 mb-3">
                   <label for="contactAlias" class="form-label fw-bold">
@@ -204,11 +208,11 @@
               </div>
               <div class="mb-3">
                 <label for="contactPhone" class="form-label">Teléfono:</label>
-                <input type="tel" class="form-control" id="contactPhone" placeholder="Ej: +1234567890">
+                <input type="tel" class="form-control" id="contactPhone" placeholder="Ej: +1234567890" data-validate="phone">
               </div>
               <div class="mb-3">
                 <label for="contactEmail" class="form-label">Email:</label>
-                <input type="email" class="form-control" id="contactEmail" placeholder="ejemplo@correo.com">
+                <input type="email" class="form-control" id="contactEmail" placeholder="ejemplo@correo.com" data-validate="email">
               </div>
               <div class="form-check mb-3">
                 <input class="form-check-input" type="checkbox" id="addToFavorites">
@@ -265,7 +269,7 @@
                     <h5 class="modal-title" id="transferErrorModalLabel">
                       <i class="fas fa-exclamation-triangle me-2"></i>Error en Transferencia
                     </h5>
-                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar">
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar" title="Cerrar modal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -301,6 +305,7 @@
     
     <!-- Transaction Management -->
     <script src="../js/transactionManager.js"></script>
+    <script src="../js/validation.js"></script>
     
     <!-- Scripts modulares -->
     <script src="../js/contactManager.js"></script>

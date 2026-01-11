@@ -18,29 +18,23 @@ class ContactManager {
     // Inicializar desde sessionManager
     async initializeFromSession() {
         try {
-            // Esperar a que SessionManager esté disponible
-            if (window.sessionManager && window.sessionManager.database) {
+            if (window.sessionManager) {
+                // Esperar a que SessionManager esté listo
+                await window.sessionManager.readyPromise;
+
                 this.database = window.sessionManager.database;
                 this.currentUser = window.sessionManager.currentUser;
 
                 if (this.currentUser) {
-                    // Obtener saldo calculado por TransactionManager para consistencia
-                    if (window.transactionManager) {
-                        this.currentBalance = window.transactionManager.calculateUserBalance(this.currentUser.email);
-                    } else {
-                        this.currentBalance = this.currentUser.balance;
-                    }
+                    this.currentBalance = window.transactionManager ?
+                        window.transactionManager.calculateUserBalance(this.currentUser.email) :
+                        this.currentUser.balance;
+
                     this.loadAvailableContacts();
                     this.renderContacts();
                     this.updateBalanceDisplay();
                     console.log('✅ ContactManager inicializado con usuario:', this.currentUser.firstName);
-                } else {
-                    console.error('❌ Usuario no encontrado en sessionManager');
                 }
-            } else {
-                console.log('⏳ Esperando SessionManager...');
-                // Reintentar en 1 segundo
-                setTimeout(() => this.initializeFromSession(), 1000);
             }
         } catch (error) {
             console.error('❌ Error inicializando ContactManager:', error);
@@ -90,14 +84,8 @@ class ContactManager {
     // Actualizar display del saldo
     updateBalanceDisplay() {
         const balanceElement = document.getElementById('currentBalance');
-        if (balanceElement && this.currentBalance !== undefined) {
-            // Usar formato es-CO (COP) para consistencia con el resto de la app
-            balanceElement.textContent = this.currentBalance.toLocaleString('es-CO', {
-                style: 'currency',
-                currency: 'COP',
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0
-            });
+        if (balanceElement && this.currentBalance !== undefined && window.sessionManager) {
+            balanceElement.textContent = window.sessionManager.formatCurrency(this.currentBalance);
         }
     }
 
@@ -240,9 +228,9 @@ class ContactManager {
     // Mostrar error
     showError(message) {
         if (typeof showNotification === 'function') {
-            showNotification(message, 'error', 'Error');
+            showNotification(message, 'error', 'Error de Contacto');
         } else {
-            alert(message);
+            console.error('❌ Error:', message);
         }
     }
 
@@ -278,14 +266,12 @@ class ContactManager {
         });
 
         contactsList.innerHTML = sortedContacts.map(contact => `
-            <div class="card mb-2 contact-card bg-transparent border-secondary ${contact.isFavorite ? 'border-info' : ''}" 
-                 onclick="contactManager.selectContact(${contact.id})" 
-                 style="cursor: pointer; transition: all 0.3s ease;">
+            <div class="card mb-2 contact-card bg-transparent border-secondary cursor-pointer transition-3 ${contact.isFavorite ? 'border-info' : ''}" 
+                 onclick="contactManager.selectContact(${contact.id})">
                 <div class="card-body py-2">
                     <div class="row align-items-center">
                         <div class="col-auto">
-                            <div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center" 
-                                 style="width: 40px; height: 40px;">
+                            <div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center user-avatar-circle large">
                                 <i class="fas fa-user"></i>
                             </div>
                         </div>

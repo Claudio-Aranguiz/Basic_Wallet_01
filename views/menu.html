@@ -13,15 +13,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/mobile.css">
+    <link rel="stylesheet" href="../css/tablet-desktop.css">
+    <link rel="stylesheet" href="../css/modals-alerts.css">
 </head>
 <body class="landing-page-bg">
 
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background-color: rgba(44, 62, 80, 0.9); backdrop-filter: blur(5px);">
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top glass-navbar">
         <div class="container-fluid">
             <!-- Avatar/Portrait del usuario (futuro acceso a perfil) -->
             <a class="navbar-brand d-flex align-items-center" href="javascript:void(0)" title="Ir al perfil de usuario">
                 <div class="user-avatar mr-2">
-                    <div class="rounded-circle d-flex align-items-center justify-content-center user-avatar-circle" style="background-color: rgba(255,255,255,0.1);">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center user-avatar-circle bg-white-translucent">
                         <i class="fas fa-user text-info fs-5"></i>
                     </div>
                 </div>
@@ -52,7 +55,8 @@
                 <!-- Botón de notificaciones -->
                 <button class="btn btn-outline-light btn-sm mr-2 position-relative" 
                         onclick="showNotification('No hay notificaciones nuevas', 'info', 'Notificaciones')" 
-                        title="Notificaciones">
+                        title="Notificaciones"
+                        aria-label="Ver notificaciones">
                     <i class="fas fa-bell"></i>
                     <span class="notification-badge bg-danger">2</span>
                 </button>
@@ -75,7 +79,7 @@
                 <!-- Mostrar saldo actual -->
                 <div class="balance-summary mb-5">
                     <div class="current-balance p-4 border rounded-3 d-inline-block">
-                        <h6 class="mb-3 text-info text-uppercase fw-bold" style="letter-spacing: 1px;">Saldo Disponible</h6>
+                        <h6 class="mb-3 text-info text-uppercase fw-bold letter-spacing-1">Saldo Disponible</h6>
                         <div class="input-group justify-content-center balance-input-container">
                             <span class="input-group-text bg-transparent border-0 text-info h3 mb-0"><i class="fas fa-dollar-sign"></i></span>
                             <input type="text" 
@@ -149,8 +153,8 @@
                                 </button>
                             </div>
                             <div class="col-sm-6 mb-2">
-                                <button class="btn btn-outline-secondary w-100" onclick="showNotification('Funcionalidad próximamente', 'info', 'Configuración')">
-                                    <i class="fas fa-cog mr-2"></i>Configuración
+                                <button class="btn btn-outline-info w-100" id="btnConfigAccount">
+                                    <i class="fas fa-cog mr-2"></i>Configuración de Cuenta
                                 </button>
                             </div>
                         </div>
@@ -160,12 +164,62 @@
 
             <!-- Información adicional -->
             <section class="mt-4">
-                <div class="alert bg-dark bg-opacity-50 text-info d-inline-block border-info" role="alert" style="background-color: rgba(0,0,0,0.3) !important;">
+                <div class="alert text-info d-inline-block border-info bg-dark-translucent" role="alert">
                     <small><i class="fas fa-shield-alt mr-2"></i>Sesión protegida con encriptación de 256 bits</small>
                 </div>
             </section>
         </div>
     </main>
+
+    <!-- Modal de Configuración de Cuenta (Glassmorphism) -->
+    <div class="modal fade" id="accountConfigModal" tabindex="-1" role="dialog" aria-labelledby="accountConfigModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content text-white border-info shadow-lg glass-modal-content">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title text-info fw-bold" id="accountConfigModalLabel">
+                        <i class="fas fa-user-cog mr-2"></i>Mi Perfil Bancario
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar" title="Cerrar modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pt-4">
+                    <div id="activationBadge" class="text-center mb-4 d-none">
+                        <span class="badge badge-pill badge-warning p-2">
+                            <i class="fas fa-gift mr-1"></i> ¡Cuenta Pendiente de Activación!
+                        </span>
+                    </div>
+
+                    <form id="accountConfigForm">
+                        <div class="form-group mb-3">
+                            <label class="text-info small fw-bold text-uppercase">Número de Cuenta</label>
+                            <input type="text" id="displayAccNumber" class="form-control bg-transparent text-white border-secondary" readonly>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label class="text-info small fw-bold text-uppercase">Alias de Billetera (Opcional)</label>
+                            <input type="text" id="inputAlias" class="form-control bg-transparent text-white border-info" placeholder="ej: mi.wallet.alke">
+                            <small class="text-muted">Úsalo para recibir transferencias más fácil</small>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label class="text-info small fw-bold text-uppercase">Banco Asociado</label>
+                            <input type="text" id="inputBank" class="form-control bg-transparent text-white border-info" placeholder="Nombre de tu banco">
+                        </div>
+
+                        <div id="activationSection" class="text-center p-3 rounded mb-4 d-none bg-deposit-accent">
+                            <p class="small text-white-50">Activa tu cuenta por primera vez y recibe un bono de <strong>$10.000 COP</strong></p>
+                            <button type="button" class="btn btn-warning btn-sm fw-bold px-4" id="btnActivateBonus">
+                                <i class="fas fa-rocket mr-2"></i>ACTIVAR Y RECIBIR BONO
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0 justify-content-center pb-4">
+                    <button type="button" class="btn btn-outline-light px-4" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-info px-4 fw-bold" id="btnSaveAccountData">Guardar Cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <footer class="sticky-sem-bottom border rounded-2 border-secondary mt-4">
         <small>© 2026 -- Alke Wallet. </small>
     </footer>
@@ -182,6 +236,7 @@
     <!-- Transaction Management -->
     <script src="../js/transactionManager.js"></script>
     <script src="../js/menuManager.js"></script>
+    <script src="../js/accountManager.js"></script>
     
     <!-- Sistema de notificaciones AlkeWallet -->
     <script src="../js/notifications.js"></script>

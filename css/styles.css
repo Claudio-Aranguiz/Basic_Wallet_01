@@ -1,199 +1,21 @@
-/* Link a CSSs según su resolución de pantalla */
+/* AlkeWallet - Global Styles & Variables */
 
+/* --- VARIABLES --- */
 :root {
     --primary-bg: #485563;
     --secondary-bg: #3a4b5d;
     --text-color: rgb(180 223 223);
     --highlight-color: rgb(27 249 241);
     --active-color: rgb(125, 237, 245);
+    --glass-bg: rgba(58, 75, 93, 0.4);
+    --glass-bg-login: rgba(58, 75, 93, 0.7);
+    --glass-bg-modal: rgba(30, 45, 60, 0.95);
+    --glass-border: rgba(255, 255, 255, 0.1);
 }
 
-/* Landing Page Specific Background */
-.landing-page-bg {
-    background: linear-gradient(rgba(44, 62, 80, 0.6), rgba(44, 62, 80, 0.6)),
-        url("../img/background-main.png") no-repeat center center fixed;
-    background-size: cover !important;
-}
-
-/* Landing Card Container */
-.landing-card-container {
-    display: flex;
-    flex: 1;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Glassmorphism Panel Utility */
-.glass-panel {
-    background-color: rgba(58, 75, 93, 0.4) !important;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 1.5rem;
-    padding: 2rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-}
-
-@media (min-width: 992px) {
-    .landing-page-bg main {
-        background-color: rgba(72, 85, 99, 0.4) !important;
-        /* Semi-transparent version of --primary-bg */
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        min-height: auto !important;
-        height: 25rem;
-        border-radius: 1.5rem;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-}
-
-/* Glassmorphism for Login Card */
-.login-card {
-    background-color: rgba(58, 75, 93, 0.7) !important;
-    /* Semi-transparent secondary-bg */
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 1rem;
-    padding: 2.5rem;
-    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    width: 100%;
-    max-width: 32rem;
-    /* Keep login card compact */
-}
-
-#mainlog {
-    min-height: 90vh;
-}
-
-/* Modales y Alertas */
-/* CSS Generales */
-
-/* Application Container - Centered Layout */
-.app-container {
-    width: 100%;
-    margin: 0 auto;
-    padding: 0 1rem;
-}
-
-/* Tablet and up */
-@media (min-width: 768px) {
-    .app-container {
-        max-width: 45rem;
-        /* ~720px */
-        padding: 0 1.5rem;
-    }
-}
-
-/* Desktop */
-@media (min-width: 992px) {
-    .app-container {
-        max-width: 60rem;
-        /* ~960px */
-        padding: 0 2rem;
-    }
-
-    body {
-        background-color: #2c3e50;
-        /* Darker background for outside the app card */
-    }
-
-    main {
-        background-color: var(--primary-bg);
-        min-height: 80vh;
-        box-shadow: 0 0 2rem rgba(0, 0, 0, 0.5);
-    }
-}
-
-/* Large Desktop */
-@media (min-width: 1200px) {
-    .app-container {
-        max-width: 70rem;
-        /* ~1120px */
-    }
-}
-
-
-/* CSS Generales */
-
-/* Hover cards para el menú */
-.hover-card {
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.hover-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-}
-
-.hover-card .card-body {
-    padding: 1.5rem;
-}
-
-.hover-card .fas {
-    transition: transform 0.3s ease;
-}
-
-.hover-card:hover .fas {
-    transform: scale(1.1);
-}
-
-/* Balance input mejorado */
-.current-balance .form-control {
-    border: none;
-    background: transparent;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #28a745 !important;
-}
-
-.current-balance .input-group-text {
-    border: none;
-    font-weight: bold;
-}
-
-/* Contenedor del input de balance */
-.balance-input-container {
-    max-width: 300px;
-    margin: 0 auto;
-}
-
-/* Notificación badge mejorada */
-.notification-badge {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    font-size: 0.7rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-}
-
-/* Avatar circle consistente */
-.user-avatar-circle {
-    width: 40px;
-    height: 40px;
-}
-
-/* Responsive improvements para el menú */
-@media (max-width: 768px) {
-    .current-balance {
-        margin: 0 auto;
-        max-width: 300px;
-    }
-
-    .hover-card {
-        margin-bottom: 1rem;
-    }
-}
-
-/* Estructuras */
+/* --- BASE --- */
 body {
+    font-family: 'Montserrat', sans-serif;
     font-size: 1rem;
     background-color: var(--primary-bg);
     color: var(--text-color);
@@ -201,8 +23,8 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-
     justify-content: center;
+    margin: 0;
 }
 
 main {
@@ -210,164 +32,31 @@ main {
     align-content: center;
 }
 
-footer {
-    text-align: center;
-    height: max-content;
-    font-size: 0.9rem;
-    color: var(--text-color);
-    background-color: #333;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    z-index: 1000;
+/* Tipografía Global */
+.letter-spacing-1 {
+    letter-spacing: 1px;
 }
 
-#checkdiv {
-    inline-size: fit-content;
+.italic {
+    font-style: italic;
 }
 
-/* Estilos para Avatar y Navbar */
-.avatardiv {
-    inline-size: fit-content;
-    width: 35px;
-    height: 35px;
-}
-
-.user-avatar-circle {
-    width: 35px;
-    height: 35px;
-}
-
-/* Navbar Enhancements */
-.navbar-balance {
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-
-.navbar-page-indicator {
-    font-size: 0.95rem;
-    font-weight: 600;
-    opacity: 0.9;
-}
-
-/* Notificaciones y elementos básicos */
-.notification-badge {
-    font-size: 0.65rem;
-    min-width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    border: 2px solid white;
-}
-
-/* Navbar sticky mantenido */
-.navbar.sticky-top {
-    position: sticky !important;
-    top: 0;
-    z-index: 1020;
-}
-
-/* Media queries simplificadas */
-@media (max-width: 576px) {
-    .notification-badge {
-        font-size: 0.6rem;
-        min-width: 16px;
-        height: 16px;
-        top: -3px;
-        right: -3px;
-    }
-}
-
-
-
-/* Componentes */
-.modal-content,
-tr,
-th,
-td,
-.card,
-.card-body {
-    background-color: rgba(58, 75, 93, 0.6) !important;
-    /* Semi-transparent for dark theme */
-    color: var(--text-color) !important;
-    border-color: rgba(255, 255, 255, 0.1) !important;
-}
-
-/* Remove any light background overlays from balance or cards */
-.bg-light,
-.bg-opacity-50,
-.bg-opacity-25 {
-    background-color: transparent !important;
-}
-
-.current-balance {
-    background-color: rgba(0, 0, 0, 0.2) !important;
-    border: 1px solid var(--highlight-color) !important;
-}
-
-a {
-    color: var(--highlight-color);
-    text-decoration: none;
-}
-
-/* Tabla responsive */
-.table-container {
-    border-radius: 0.375rem;
-    border: 1px solid #dee2e6;
-    background-color: #2c3e50;
-}
-
-.table-responsive {
-    border-radius: 0.375rem;
-}
-
-.table {
-    color: var(--text-color);
-    margin-bottom: 0;
-}
-
-.table thead th {
-    border-bottom: 2px solid #495057;
-    color: var(--text-color);
-    font-weight: 600;
-}
-
-.table tbody tr:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-/* Scroll personalizado para webkit browsers */
-.table-container::-webkit-scrollbar {
+/* Scrollbar Personalizado */
+::-webkit-scrollbar {
     width: 8px;
     height: 8px;
 }
 
-.table-container::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
     background: #2c3e50;
     border-radius: 4px;
 }
 
-.table-container::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
     background: #495057;
     border-radius: 4px;
 }
 
-.table-container::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
     background: #6c757d;
-}
-
-
-/* Tipografías */
-
-/* Otros */
-
-.active {
-    color: var(--active-color);
 }

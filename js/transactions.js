@@ -3,9 +3,9 @@
  * Conectado con transactionManager.js y sessionManager.js
  */
 
-$(document).ready(function() {
+$(document).ready(function () {
     console.log('📊 Transactions.js inicializado');
-    
+
     // Verificar autenticación
     if (!window.sessionManager || !window.sessionManager.isAuthenticated) {
         console.log('❌ Usuario no autenticado, redirigiendo...');
@@ -29,7 +29,7 @@ $(document).ready(function() {
  */
 function initializeTransactionsPage() {
     console.log('🚀 Inicializando página de transacciones');
-    
+
     const currentUser = window.sessionManager.getCurrentUser();
     if (!currentUser) {
         console.error('❌ No se pudo obtener el usuario actual');
@@ -38,10 +38,10 @@ function initializeTransactionsPage() {
 
     // Actualizar saldo
     updateUserBalance(currentUser.email);
-    
+
     // Cargar y mostrar transacciones
     loadAndDisplayTransactions(currentUser.email);
-    
+
     // Actualizar información del usuario en la navbar
     updateUserInfo(currentUser);
 }
@@ -56,7 +56,7 @@ function updateUserBalance(userId) {
             style: 'currency',
             currency: 'COP'
         });
-        
+
         $('.balance-summary h2').text(formattedBalance);
         console.log('💰 Saldo actualizado:', formattedBalance);
     } catch (error) {
@@ -71,12 +71,12 @@ function loadAndDisplayTransactions(userId) {
     try {
         const transactions = window.transactionManager.getUserTransactions(userId);
         console.log('📋 Transacciones del usuario:', transactions.length);
-        
+
         if (transactions.length === 0) {
             showNoTransactions();
             return;
         }
-        
+
         renderTransactions(transactions);
     } catch (error) {
         console.error('❌ Error cargando transacciones:', error);
@@ -90,12 +90,12 @@ function loadAndDisplayTransactions(userId) {
 function renderTransactions(transactions) {
     const tbody = $('table tbody');
     tbody.empty();
-    
+
     transactions.forEach(transaction => {
         const row = createTransactionRow(transaction);
         tbody.append(row);
     });
-    
+
     console.log('✅ Transacciones renderizadas:', transactions.length);
 }
 
@@ -106,7 +106,7 @@ function createTransactionRow(transaction) {
     const badge = window.transactionManager.getTransactionBadge(transaction.type);
     const amount = window.transactionManager.formatAmount(transaction.amount);
     const date = window.transactionManager.formatDate(transaction.date);
-    
+
     return `
         <tr data-transaction-id="${transaction.id}">
             <td class="fw-semibold">${date}</td>
@@ -149,12 +149,9 @@ function updateUserInfo(user) {
  */
 function showError(message) {
     console.error('❌ Error:', message);
-    
-    // Usar el sistema de notificaciones si está disponible
+
     if (typeof showNotification === 'function') {
-        showNotification(message, 'error', 'Error');
-    } else {
-        alert('Error: ' + message);
+        showNotification(message, 'error', 'Error en Historial');
     }
 }
 

@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/mobile.css">
+    <link rel="stylesheet" href="../css/tablet-desktop.css">
+    <link rel="stylesheet" href="../css/modals-alerts.css">
 </head>
 <body class="text-center landing-page-bg">
     <main id="mainlog" class="app-container d-flex align-items-center justify-content-center">
@@ -24,12 +27,12 @@
           <form class="login-form my-4">
             <div class="mb-3">
               <label for="email" class="form-label fw-semibold">Correo electrónico</label>
-              <input type="email" class="form-control" id="email" name="email" placeholder="Ingresa tu email" required>
+              <input type="email" class="form-control" id="email" name="email" placeholder="Ingresa tu email" required data-validate="email">
               <div class="form-text text-info">Tu información está segura con nosotros.</div>
             </div>
             <div class="mb-2">
               <label for="password" class="form-label fw-semibold">Contraseña</label>
-              <input type="password" class="form-control" id="password" name="password" placeholder="Ingresa tu contraseña" required>
+              <input type="password" class="form-control" id="password" name="password" placeholder="Ingresa tu contraseña" required data-validate="password">
             </div>
             <div class="mb-4 form-check" id="checkdiv">
               <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe">
@@ -51,8 +54,8 @@
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="registerModalLabel">Crear Nueva Cuenta</h1>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+            <h4 class="modal-title fs-5" id="registerModalLabel">Crear Nueva Cuenta</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar" title="Cerrar modal">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -61,11 +64,11 @@
               <div class="row">
                 <div class="col-md-6 mb-3">
                   <label for="firstName" class="form-label fw-bold">Nombre:</label>
-                  <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Ej: Juan" required>
+                  <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Ej: Juan" required data-validate="firstName">
                 </div>
                 <div class="col-md-6 mb-3">
                   <label for="lastName" class="form-label fw-bold">Apellido:</label>
-                  <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Ej: Pérez" required>
+                  <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Ej: Pérez" required data-validate="lastName">
                 </div>
               </div>
               <div class="mb-3">
@@ -74,13 +77,13 @@
               </div>
               <div class="mb-3">
                 <label for="emailRegister" class="form-label fw-bold">Correo electrónico:</label>
-                <input type="email" class="form-control" id="emailRegister" name="email" placeholder="ejemplo@correo.com" required>
+                <input type="email" class="form-control" id="emailRegister" name="email" placeholder="ejemplo@correo.com" required data-validate="email">
                 <div class="form-text text-info">Tu email nunca será expuesto o compartido a un tercero.</div>
               </div>
               <div class="row">
                 <div class="col-md-6 mb-3">
                   <label for="passwordRegister" class="form-label fw-bold">Contraseña:</label>
-                  <input type="password" class="form-control" id="passwordRegister" name="password" placeholder="Mínimo 6 caracteres" required>
+                  <input type="password" class="form-control" id="passwordRegister" name="password" placeholder="Mínimo 6 caracteres" required data-validate="password">
                 </div>
                 <div class="col-md-6 mb-3">
                   <label for="confirmPassword" class="form-label fw-bold">Confirmar contraseña:</label>
@@ -89,7 +92,7 @@
               </div>
               <div class="mb-3">
                 <label for="phone" class="form-label fw-bold">Teléfono:</label>
-                <input type="tel" class="form-control" id="phone" name="phone" placeholder="Ej: +56911223344" required>
+                <input type="tel" class="form-control" id="phone" name="phone" placeholder="Ej: +56911223344" required data-validate="phone">
               </div>
               <div class="form-check mb-3">
                 <input class="form-check-input" type="checkbox" id="acceptTerms" required>
