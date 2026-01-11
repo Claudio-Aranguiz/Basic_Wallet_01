@@ -14,13 +14,13 @@
 
     <link rel="stylesheet" href="../css/styles.css">
 </head>
-<body class="text-center">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-info sticky-top">
+<body class="landing-page-bg">
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background-color: rgba(44, 62, 80, 0.9); backdrop-filter: blur(5px);">
         <div class="container-fluid">
             <!-- Avatar/Portrait del usuario (futuro acceso a perfil) -->
             <a class="navbar-brand d-flex align-items-center" href="javascript:void(0)" title="Ir al perfil de usuario">
-                <div class="user-avatar me-2">
-                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center user-avatar-circle">
+                <div class="user-avatar mr-2">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center user-avatar-circle" style="background-color: rgba(255,255,255,0.1);">
                         <i class="fas fa-user text-info fs-5"></i>
                     </div>
                 </div>
@@ -30,20 +30,20 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
+                <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
                         <a class="nav-link text-white mx-2" href="./sendmoney.html">
-                            <i class="fas fa-paper-plane me-1"></i>Transferir
+                            <i class="fas fa-paper-plane mr-1"></i>Transferir
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white mx-2" href="./transactions.html">
-                            <i class="fas fa-history me-1"></i>Historial
+                            <i class="fas fa-history mr-1"></i>Historial
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white mx-2" href="./menu.html">
-                            <i class="fas fa-home me-1"></i>Menú Principal
+                            <i class="fas fa-home mr-1"></i>Menú Principal
                         </a>
                     </li>
                 </ul>
@@ -64,86 +64,84 @@
         </div>
     </nav>
     
-    <main class="container-fluid px-3 pt-4">
+    <main class="app-container py-5">
+      <div class="glass-panel text-center">
+        <h2 class="mb-4 fw-bold">Realizar Depósito</h2>
 
-      <!-- Mostrar saldo actual -->
-      <section class="balance-summary">
-        <div class="current-balance my-3 p-3 border rounded-2 border-info d-inline-block bg-dark bg-opacity-25">
-          <h6 class="mb-1">Saldo Actual</h6>
-          <h2 class="fw-bold text-info">$173,249.50</h2>
-          <small class="text-muted">Actualizado en tiempo real</small>
-        </div>
-      </section>
-
-      <!-- Opciones de depósito -->
-      <section class="deposit-options row justify-content-center">
-        <div class="col-md-6 col-lg-4 mb-4">
-          <!-- Botón para abrir cámara y leer QR -->
-          <div class="card border-info">
-            <div class="card-body text-center">
-              <i class="fas fa-qrcode fa-3x text-info mb-3"></i>
-              <h5 class="card-title">Escanear Código QR</h5>
-              <p class="card-text">Deposita escaneando un código QR desde tu dispositivo móvil</p>
-              <button class="btn btn-info" id="scanQRBtn">
-                <i class="fas fa-camera me-2"></i>Escanear Código QR
-              </button>
-            </div>
+        <!-- Mostrar saldo actual -->
+        <section class="balance-summary mb-5">
+          <div class="current-balance p-4 border rounded-3 d-inline-block">
+            <h6 class="mb-2 text-info text-uppercase fw-bold">Saldo Actual</h6>
+            <h2 class="fw-bold text-white" id="currentBalanceDisplay">$173,249.50</h2>
+            <small class="text-muted d-block mt-2 italic">Actualizado en tiempo real</small>
           </div>
-        </div>
-        
-        <div class="col-md-6 col-lg-4 mb-4">
-          <!-- Formulario para ingresar monto manualmente -->
-          <div class="card border-success">
-            <div class="card-body">
-              <i class="fas fa-money-bill-wave fa-3x text-success mb-3 d-block text-center"></i>
-              <h5 class="card-title text-center">Depósito Manual</h5>
-              <form class="deposit-form" id="depositForm">
-                <div class="mb-3">
-                  <label for="depositAmount" class="form-label fw-bold">Monto a Depositar:</label>
-                  <div class="input-group">
-                    <span class="input-group-text">$</span>
-                    <input type="number" class="form-control" id="depositAmount" placeholder="10,000" min="1000" max="5000000" step="1" required>
-                  </div>
-                  <small class="form-text text-muted">Mínimo: $1,000 - Máximo: $5,000,000</small>
-                </div>
-                <div class="mb-3">
-                  <label for="depositMethod" class="form-label fw-bold">Método de depósito:</label>
-                  <select class="form-select form-control" id="depositMethod" required>
-                    <option value="" selected>Seleccionar método</option>
-                    <option value="bank">🏦 Transferencia bancaria</option>
-                    <option value="card">💳 Tarjeta de crédito/débito</option>
-                    <option value="paypal">💵 PayPal</option>
-                    <option value="crypto">₿ Criptomoneda</option>
-                    <option value="cash">💵 Efectivo - Sucursal</option>
-                  </select>
-                </div>
-                <button type="submit" class="btn btn-success w-100" id="depositSubmitBtn">
-                  <i class="fas fa-plus-circle me-2"></i>Realizar Depósito
+        </section>
+
+        <!-- Opciones de depósito -->
+        <section class="deposit-options row justify-content-center">
+          <div class="col-md-6 mb-4">
+            <!-- Botón para abrir cámara y leer QR -->
+            <div class="card h-100 hover-card">
+              <div class="card-body d-flex flex-column align-items-center">
+                <i class="fas fa-qrcode fa-3x text-info mb-3"></i>
+                <h5 class="card-title">Escanear Código QR</h5>
+                <p class="card-text small text-muted mb-4">Deposita escaneando un código QR desde tu dispositivo móvil</p>
+                <button class="btn btn-outline-info mt-auto w-100" id="scanQRBtn">
+                  <i class="fas fa-camera mr-2"></i>Abrir Cámara
                 </button>
-              </form>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+          
+          <div class="col-md-6 mb-4">
+            <!-- Formulario para ingresar monto manualmente -->
+            <div class="card h-100 shadow-sm border-0" style="background-color: rgba(255,255,255,0.05) !important;">
+              <div class="card-body">
+                <i class="fas fa-money-bill-wave fa-3x text-success mb-3 d-block text-center"></i>
+                <h5 class="card-title text-center mb-4">Depósito Manual</h5>
+                <form class="deposit-form text-start" id="depositForm">
+                  <div class="mb-3">
+                    <label for="depositAmount" class="form-label fw-bold">Monto a Depositar:</label>
+                    <div class="input-group">
+                      <span class="input-group-text bg-transparent text-success border-secondary">$</span>
+                      <input type="number" class="form-control bg-transparent text-white border-secondary" id="depositAmount" placeholder="10,000" min="1000" max="5000000" step="1" required>
+                    </div>
+                    <small class="form-text text-muted">Mínimo: $1,000 - Máximo: $5,000,000</small>
+                  </div>
+                  <div class="mb-4">
+                    <label for="depositMethod" class="form-label fw-bold">Método de depósito:</label>
+                    <select class="form-select form-control bg-transparent text-white border-secondary" id="depositMethod" required>
+                      <option value="" selected class="bg-dark">Seleccionar método</option>
+                      <option value="bank" class="bg-dark">🏦 Transferencia bancaria</option>
+                      <option value="card" class="bg-dark">💳 Tarjeta de crédito/débito</option>
+                      <option value="paypal" class="bg-dark">💵 PayPal</option>
+                      <option value="crypto" class="bg-dark">₿ Criptomoneda</option>
+                      <option value="cash" class="bg-dark">💵 Efectivo - Sucursal</option>
+                    </select>
+                  </div>
+                  <button type="submit" class="btn btn-success btn-lg w-100" id="depositSubmitBtn">
+                    <i class="fas fa-plus-circle mr-2"></i>Confirmar Depósito
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
 
-      <!-- Información adicional -->
-      <section class="deposit-info mt-2">
-        <div class="row justify-content-center">
-          <div class="col-md-8">
-            <div class="alert alert-info" role="alert">
-              <h6 class="alert-heading"><i class="fas fa-info-circle me-2"></i>Información importante:</h6>
-              <ul class="mb-0">
-                <li>Los depósitos se procesan inmediatamente</li>
-                <li>Monto mínimo de depósito: $1,000</li>
-                <li>Monto máximo de depósito: $5,000,000 por transacción</li>
-                <li>No se cobran comisiones por depósitos</li>
-                <li>Tu saldo se actualiza automáticamente</li>
-                <li>Todas las transacciones quedan registradas en tu historial</li>
-              </ul>
+        <!-- Información adicional -->
+        <section class="deposit-info mt-4">
+          <div class="alert border-info text-info mb-0" role="alert" style="background-color: rgba(0,0,0,0.3) !important;">
+            <div class="d-flex align-items-center mb-2">
+                <i class="fas fa-info-circle mr-2 fw-bold"></i>
+                <h6 class="mb-0 fw-bold">Información importante:</h6>
             </div>
+            <ul class="mb-0 text-left small">
+              <li>Los depósitos se procesan inmediatamente. Sin comisiones extras.</li>
+              <li>Tu saldo se actualiza automáticamente y queda registrado en tu historial.</li>
+            </ul>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </main>
     <footer class="sticky-sem-bottom border rounded-2 border-secondary mt-4">
         <small>© 2026 -- Alke Wallet. </small>

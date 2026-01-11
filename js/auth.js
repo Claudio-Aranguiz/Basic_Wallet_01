@@ -140,7 +140,7 @@ function handleLogout() {
 // Inicialización cuando DOM está listo
 document.addEventListener('DOMContentLoaded', () => {
     // Configurar formulario de login
-    const loginForm = document.querySelector('form[onsubmit*="handleLogin"]');
+    const loginForm = document.querySelector('.login-form');
     if (loginForm) {
         loginForm.addEventListener('submit', handleLogin);
     }

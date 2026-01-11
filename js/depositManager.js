@@ -13,7 +13,7 @@ class DepositManager {
 
     async init() {
         console.log('💰 Inicializando DepositManager');
-        
+
         // Verificar dependencias
         if (!window.sessionManager) {
             console.error('❌ SessionManager no disponible');
@@ -42,10 +42,10 @@ class DepositManager {
 
         this.isInitialized = true;
         console.log('✅ DepositManager inicializado correctamente');
-        
+
         // Actualizar saldo en la interfaz
         this.updateBalanceDisplay();
-        
+
         // Configurar event listeners
         this.setupEventListeners();
     }
@@ -53,7 +53,7 @@ class DepositManager {
     // Configurar event listeners
     setupEventListeners() {
         console.log('🎯 Configurando event listeners');
-        
+
         // Formulario de depósito
         const depositForm = document.getElementById('depositForm');
         if (depositForm) {
@@ -69,7 +69,7 @@ class DepositManager {
             amountInput.addEventListener('input', (e) => {
                 this.validateAmount(e.target.value);
             });
-            
+
             // Formatear entrada
             amountInput.addEventListener('blur', (e) => {
                 this.formatAmountInput(e.target);
@@ -108,12 +108,12 @@ class DepositManager {
     validateAmount(amount) {
         const amountInput = document.getElementById('depositAmount');
         const submitBtn = document.querySelector('#depositForm button[type="submit"]');
-        
+
         let isValid = true;
         let errorMessage = '';
-        
+
         const numAmount = parseFloat(amount);
-        
+
         if (!amount || isNaN(numAmount)) {
             isValid = false;
             errorMessage = 'Ingrese un monto válido';
@@ -130,7 +130,7 @@ class DepositManager {
             if (amount && !isValid) {
                 amountInput.classList.add('is-invalid');
                 amountInput.classList.remove('is-valid');
-                
+
                 // Mostrar mensaje de error
                 let feedback = amountInput.parentNode.parentNode.querySelector('.invalid-feedback');
                 if (!feedback) {
@@ -142,7 +142,7 @@ class DepositManager {
             } else if (amount && isValid) {
                 amountInput.classList.add('is-valid');
                 amountInput.classList.remove('is-invalid');
-                
+
                 // Remover mensaje de error
                 const feedback = amountInput.parentNode.parentNode.querySelector('.invalid-feedback');
                 if (feedback) feedback.remove();
@@ -172,7 +172,7 @@ class DepositManager {
 
         const amountInput = document.getElementById('depositAmount');
         const methodSelect = document.getElementById('depositMethod');
-        
+
         if (!amountInput || !methodSelect) {
             this.showError('Error en el formulario');
             return;
@@ -217,44 +217,54 @@ class DepositManager {
         const modalHTML = `
         <div class="modal fade" id="depositConfirmModal" tabindex="-1" role="dialog" aria-labelledby="depositConfirmModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header bg-success text-white">
-                        <h5 class="modal-title" id="depositConfirmModalLabel">
-                            <i class="fas fa-plus-circle me-2"></i>Confirmar Depósito
+                <div class="modal-content bg-dark text-white border-info shadow-lg" style="backdrop-filter: blur(15px); background-color: rgba(30, 45, 60, 0.95) !important;">
+                    <div class="modal-header border-0 pb-0">
+                        <h5 class="modal-title text-info fw-bold" id="depositConfirmModalLabel">
+                            <i class="fas fa-plus-circle mr-2"></i>Confirmar Depósito
                         </h5>
-                        <button type="button" class="btn-close text-white" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body text-center">
+                    <div class="modal-body text-center pt-4">
                         <div class="mb-4">
-                            <i class="fas fa-money-bill-wave fa-4x text-success mb-3"></i>
-                            <h4 class="text-success">${formattedAmount}</h4>
-                            <p class="text-muted">será depositado a tu cuenta</p>
+                            <div class="rounded-circle bg-info d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px; background-color: rgba(23, 162, 184, 0.2) !important;">
+                                <i class="fas fa-money-bill-wave fa-2x text-info"></i>
+                            </div>
+                            <h2 class="text-white fw-bold">${formattedAmount}</h2>
+                            <p class="text-muted italic">Monto a depositar</p>
                         </div>
                         
-                        <div class="row text-start">
-                            <div class="col-12">
-                                <strong>Detalles del depósito:</strong>
-                                <hr class="my-2">
-                                <p class="mb-2"><strong>Monto:</strong> ${formattedAmount}</p>
-                                <p class="mb-2"><strong>Método:</strong> ${methodNames[method] || method}</p>
-                                <p class="mb-2"><strong>Comisión:</strong> $0 (Sin costo)</p>
-                                <p class="mb-0"><strong>Tiempo de procesamiento:</strong> Inmediato</p>
+                        <div class="row text-start px-3">
+                            <div class="col-12 p-3 rounded-3" style="background-color: rgba(255,255,255,0.05);">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted">Método:</span>
+                                    <span class="fw-bold text-info">${methodNames[method] || method}</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted">Comisión:</span>
+                                    <span class="text-success fw-bold">$0 (Sin costo)</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-muted">Disponibilidad:</span>
+                                    <span class="text-white">Inmediata</span>
+                                </div>
                             </div>
                         </div>
                         
-                        <div class="alert alert-info mt-3" role="alert">
-                            <small><i class="fas fa-info-circle me-1"></i>
-                            El depósito se procesará inmediatamente y tu saldo será actualizado al confirmar.</small>
+                        <div class="mt-4 px-3">
+                            <p class="small text-muted mb-0">
+                                <i class="fas fa-info-circle mr-1 text-info"></i>
+                                Los fondos estarán disponibles en tu cuenta tras confirmar.
+                            </p>
                         </div>
                     </div>
-                    <div class="modal-footer justify-content-center">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                            <i class="fas fa-times me-2"></i>Cancelar
+                    <div class="modal-footer border-0 justify-content-center pb-4">
+                        <button type="button" class="btn btn-outline-light px-4" data-dismiss="modal">
+                            Cancelar
                         </button>
-                        <button type="button" class="btn btn-success" id="confirmDepositBtn">
-                            <i class="fas fa-check me-2"></i>Confirmar Depósito
+                        <button type="button" class="btn btn-info px-4 fw-bold" id="confirmDepositBtn">
+                            Confirmar Depósito
                         </button>
                     </div>
                 </div>
@@ -283,7 +293,7 @@ class DepositManager {
     async executeDeposit(amount, method) {
         const confirmBtn = document.getElementById('confirmDepositBtn');
         const originalBtnText = confirmBtn.innerHTML;
-        
+
         try {
             // Mostrar loading
             confirmBtn.disabled = true;
@@ -368,14 +378,12 @@ class DepositManager {
         });
 
         const message = `¡Depósito exitoso!\n\nSe han depositado ${formattedAmount} mediante ${methodNames[method]}\n\nTu saldo ha sido actualizado correctamente.`;
-        
-        alert(message);
 
-        // Usar notificaciones si están disponibles
+        // Usar solo notificaciones para evitar redundancia
         if (typeof showNotification === 'function') {
             showNotification(
-                `Depósito de ${formattedAmount} realizado exitosamente`, 
-                'success', 
+                `Depósito de ${formattedAmount} realizado exitosamente`,
+                'success',
                 'Depósito Exitoso'
             );
         }
@@ -385,7 +393,7 @@ class DepositManager {
     showError(message) {
         console.error('❌ Error:', message);
         alert('Error: ' + message);
-        
+
         if (typeof showNotification === 'function') {
             showNotification(message, 'error', 'Error en Depósito');
         }
@@ -396,7 +404,7 @@ class DepositManager {
         const form = document.getElementById('depositForm');
         if (form) {
             form.reset();
-            
+
             // Limpiar clases de validación
             const inputs = form.querySelectorAll('.form-control, .form-select');
             inputs.forEach(input => {
@@ -421,13 +429,13 @@ class DepositManager {
         setTimeout(() => {
             qrBtn.disabled = false;
             qrBtn.innerHTML = originalText;
-            
+
             alert('🚧 Funcionalidad de escáner QR en desarrollo.\n\nPor favor, usa el depósito manual por ahora.');
-            
+
             if (typeof showNotification === 'function') {
                 showNotification(
-                    'Funcionalidad en desarrollo. Usa el depósito manual.', 
-                    'info', 
+                    'Funcionalidad en desarrollo. Usa el depósito manual.',
+                    'info',
                     'QR Scanner'
                 );
             }

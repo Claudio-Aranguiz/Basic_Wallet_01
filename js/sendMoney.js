@@ -8,7 +8,7 @@ class SendMoneyManager {
         this.currentUser = null;
         this.database = null;
         this.transactions = [];
-        
+
         this.initializeFromSession();
         this.initializeEvents();
     }
@@ -19,7 +19,7 @@ class SendMoneyManager {
             if (window.sessionManager && window.sessionManager.database) {
                 this.database = window.sessionManager.database;
                 this.currentUser = window.sessionManager.currentUser;
-                
+
                 if (this.currentUser) {
                     this.loadTransactions();
                     console.log('✅ SendMoneyManager inicializado para usuario:', this.currentUser.firstName);
@@ -65,10 +65,15 @@ class SendMoneyManager {
     validateAmount(amount) {
         const amountInput = document.getElementById('send-amount');
         const sendButton = document.getElementById('btn-send-money');
-        
+
         const numAmount = parseFloat(amount);
-        const currentBalance = this.currentUser ? this.currentUser.balance : 0;
-        
+
+        // Obtener saldo actualizado de TransactionManager para la validación
+        let currentBalance = this.currentUser ? this.currentUser.balance : 0;
+        if (window.transactionManager && this.currentUser) {
+            currentBalance = window.transactionManager.calculateUserBalance(this.currentUser.email);
+        }
+
         let isValid = true;
         let errorMessage = '';
 
@@ -102,9 +107,9 @@ class SendMoneyManager {
         // Habilitar/deshabilitar botón
         if (sendButton) {
             const hasContact = (window.contactManager && window.contactManager.selectedContact) ||
-                             (typeof contactManager !== 'undefined' && contactManager.selectedContact);
+                (typeof contactManager !== 'undefined' && contactManager.selectedContact);
             sendButton.disabled = !isValid || !hasContact;
-            
+
             console.log('🔘 Botón estado - Monto válido:', isValid, 'Contacto seleccionado:', !!hasContact);
         }
 
@@ -116,12 +121,12 @@ class SendMoneyManager {
         console.log('💰 Procesando envío de dinero...');
         console.log('🔍 window.contactManager existe:', !!window.contactManager);
         console.log('🔍 contactManager global existe:', typeof contactManager !== 'undefined');
-        
-        const selectedContact = window.contactManager?.selectedContact || 
-                               (typeof contactManager !== 'undefined' ? contactManager.selectedContact : null);
-        
+
+        const selectedContact = window.contactManager?.selectedContact ||
+            (typeof contactManager !== 'undefined' ? contactManager.selectedContact : null);
+
         console.log('👤 Contacto seleccionado:', selectedContact);
-        
+
         if (!selectedContact) {
             console.error('❌ No hay contacto seleccionado');
             this.showError('Debe seleccionar un contacto para realizar la transferencia');
@@ -130,7 +135,7 @@ class SendMoneyManager {
 
         const amountInput = document.getElementById('send-amount');
         const conceptInput = document.getElementById('send-concept');
-        
+
         if (!amountInput || !conceptInput) {
             this.showError('Error en el formulario');
             return;
@@ -212,7 +217,7 @@ class SendMoneyManager {
                     amount: -amount, // Negativo porque es un egreso
                     status: 'completed'
                 });
-                
+
                 // También registrar la transacción del receptor
                 window.transactionManager.addTransaction({
                     userId: contact.email,
@@ -223,7 +228,7 @@ class SendMoneyManager {
                     amount: amount, // Positivo porque es un ingreso
                     status: 'completed'
                 });
-                
+
                 console.log('📊 Transacciones registradas en TransactionManager');
             }
 
@@ -242,19 +247,19 @@ class SendMoneyManager {
             if (window.DATABASE) {
                 const userIndex = window.DATABASE.users.findIndex(u => u.id === this.currentUser.id);
                 const recipientIndex = window.DATABASE.users.findIndex(u => u.id === contact.id);
-                
+
                 if (userIndex !== -1) window.DATABASE.users[userIndex].balance = this.currentUser.balance;
                 if (recipientIndex !== -1) window.DATABASE.users[recipientIndex].balance = recipientUser.balance;
-                
+
                 window.DATABASE.transactions.push(newTransaction);
             }
 
             // Mostrar mensaje de éxito
             this.showSuccess(contact, amount, newTransaction.transactionCode);
-            
+
             // Limpiar formulario
             this.clearForm();
-            
+
             console.log('✅ Transferencia exitosa:', newTransaction);
 
         } catch (error) {
@@ -265,10 +270,7 @@ class SendMoneyManager {
 
     // Mostrar mensaje de éxito
     showSuccess(contact, amount, transactionCode) {
-        const message = `✅ ¡Transferencia exitosa!\n\nSe enviaron $${amount.toLocaleString('es-CL')} a ${contact.name}\nCódigo: ${transactionCode}`;
-        alert(message);
-        
-        // También usar notificaciones si están disponibles
+        // Usar solo notificaciones para evitar redundancia
         if (typeof showNotification === 'function') {
             showNotification(`Transferencia de $${amount.toLocaleString('es-CL')} enviada a ${contact.name}`, 'success', 'Transferencia Exitosa');
         }
@@ -277,7 +279,7 @@ class SendMoneyManager {
     // Mostrar mensaje de error
     showError(message) {
         alert('❌ Error: ' + message);
-        
+
         if (typeof showNotification === 'function') {
             showNotification(message, 'error', 'Error en Transferencia');
         }
@@ -287,12 +289,12 @@ class SendMoneyManager {
     clearForm() {
         const amountInput = document.getElementById('send-amount');
         const conceptInput = document.getElementById('send-concept');
-        
+
         if (amountInput) {
             amountInput.value = '';
             amountInput.classList.remove('is-valid', 'is-invalid');
         }
-        
+
         if (conceptInput) {
             conceptInput.value = '';
         }

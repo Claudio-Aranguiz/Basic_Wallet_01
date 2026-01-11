@@ -10,7 +10,7 @@ class ContactManager {
         this.currentUser = null;
         this.currentBalance = 0;
         this.database = null;
-        
+
         this.initializeFromSession();
         this.initializeEvents();
     }
@@ -22,9 +22,14 @@ class ContactManager {
             if (window.sessionManager && window.sessionManager.database) {
                 this.database = window.sessionManager.database;
                 this.currentUser = window.sessionManager.currentUser;
-                
+
                 if (this.currentUser) {
-                    this.currentBalance = this.currentUser.balance;
+                    // Obtener saldo calculado por TransactionManager para consistencia
+                    if (window.transactionManager) {
+                        this.currentBalance = window.transactionManager.calculateUserBalance(this.currentUser.email);
+                    } else {
+                        this.currentBalance = this.currentUser.balance;
+                    }
                     this.loadAvailableContacts();
                     this.renderContacts();
                     this.updateBalanceDisplay();
@@ -62,7 +67,7 @@ class ContactManager {
                 profileImage: user.profileImage,
                 isFavorite: false // Por ahora todos como no favoritos
             }));
-            
+
         console.log('📞 Contactos cargados:', this.contacts.length);
     }
 
@@ -70,7 +75,14 @@ class ContactManager {
     updateBalanceFromSession() {
         if (window.sessionManager && window.sessionManager.currentUser) {
             this.currentUser = window.sessionManager.currentUser;
-            this.currentBalance = this.currentUser.balance;
+
+            // Obtener saldo calculado por TransactionManager
+            if (window.transactionManager) {
+                this.currentBalance = window.transactionManager.calculateUserBalance(this.currentUser.email);
+            } else {
+                this.currentBalance = this.currentUser.balance;
+            }
+
             this.updateBalanceDisplay();
         }
     }
@@ -79,10 +91,13 @@ class ContactManager {
     updateBalanceDisplay() {
         const balanceElement = document.getElementById('currentBalance');
         if (balanceElement && this.currentBalance !== undefined) {
-            balanceElement.textContent = `$${this.currentBalance.toLocaleString('es-CL', {
+            // Usar formato es-CO (COP) para consistencia con el resto de la app
+            balanceElement.textContent = this.currentBalance.toLocaleString('es-CO', {
+                style: 'currency',
+                currency: 'COP',
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0
-            })}`;
+            });
         }
     }
 
@@ -132,7 +147,7 @@ class ContactManager {
     validateCBU(cbu) {
         const cbuInput = document.getElementById('contactCBU');
         const isValid = cbu.length === 22 && /^\d{22}$/.test(cbu);
-        
+
         if (cbuInput) {
             if (cbu.length > 0 && !isValid) {
                 cbuInput.classList.add('is-invalid');
@@ -152,7 +167,7 @@ class ContactManager {
         const aliasInput = document.getElementById('contactAlias');
         const isValid = alias.length >= 6 && alias.length <= 20;
         const isDuplicate = this.contacts.some(contact => contact.alias === alias);
-        
+
         if (aliasInput) {
             if (alias.length > 0 && (!isValid || isDuplicate)) {
                 aliasInput.classList.add('is-invalid');
@@ -263,9 +278,9 @@ class ContactManager {
         });
 
         contactsList.innerHTML = sortedContacts.map(contact => `
-            <div class="card mb-2 contact-card ${contact.isFavorite ? 'border-warning' : ''}" 
+            <div class="card mb-2 contact-card bg-transparent border-secondary ${contact.isFavorite ? 'border-info' : ''}" 
                  onclick="contactManager.selectContact(${contact.id})" 
-                 style="cursor: pointer;">
+                 style="cursor: pointer; transition: all 0.3s ease;">
                 <div class="card-body py-2">
                     <div class="row align-items-center">
                         <div class="col-auto">
@@ -294,31 +309,33 @@ class ContactManager {
     selectContact(contactId) {
         console.log('👤 Seleccionando contacto con ID:', contactId);
         this.selectedContact = this.contacts.find(c => c.id === contactId);
-        
+
         if (this.selectedContact) {
             console.log('✅ Contacto seleccionado:', this.selectedContact.name);
             this.showSelectedContactInfo();
             this.showSendMoneySection();
-            
+
             // Marcar contacto seleccionado visualmente
             document.querySelectorAll('.contact-card').forEach(card => {
-                card.classList.remove('border-success', 'bg-light');
+                card.classList.remove('border-info', 'glass-panel-accent');
+                card.classList.add('border-secondary');
             });
-            
+
             // Buscar la tarjeta específica y marcarla
-            const selectedCard = event ? event.currentTarget : 
+            const selectedCard = event ? event.currentTarget :
                 document.querySelector(`.contact-card[onclick*="${contactId}"]`);
             if (selectedCard) {
-                selectedCard.classList.add('border-success', 'bg-light');
+                selectedCard.classList.remove('border-secondary');
+                selectedCard.classList.add('border-info', 'glass-panel-accent');
             }
-            
+
             // Habilitar botón de envío si existe
             const sendButton = document.getElementById('btn-send-money');
             if (sendButton) {
                 // Verificar también que hay monto válido
                 const amountInput = document.getElementById('send-amount');
                 const amount = amountInput ? parseFloat(amountInput.value) : 0;
-                
+
                 if (amount > 0 && !isNaN(amount)) {
                     sendButton.disabled = false;
                     console.log('✅ Botón de envío habilitado');
@@ -337,13 +354,13 @@ class ContactManager {
         infoContainer.innerHTML = `
             <div class="row mb-4">
                 <div class="col-12">
-                    <div class="card border-success">
-                        <div class="card-header bg-success text-white">
-                            <h6 class="mb-0">
-                                <i class="fas fa-user-check me-2"></i>Contacto Seleccionado
+                    <div class="card border-info bg-transparent">
+                        <div class="card-header border-0 bg-transparent text-info fw-bold">
+                            <h6 class="mb-0 small">
+                                <i class="fas fa-user-check mr-2"></i>CONTACTO SELECCIONADO
                             </h6>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body pt-0 text-white">
                             <div class="row">
                                 <div class="col-md-6">
                                     <strong>Nombre:</strong> ${this.selectedContact.name}<br>
@@ -368,11 +385,11 @@ class ContactManager {
         const sendMoneySection = document.getElementById('send-money-section');
         if (sendMoneySection) {
             sendMoneySection.style.display = 'block';
-            
+
             // Habilitar botón cuando hay monto válido
             const amountInput = document.getElementById('send-amount');
             const sendButton = document.getElementById('btn-send-money');
-            
+
             if (amountInput && sendButton) {
                 amountInput.addEventListener('input', () => {
                     const amount = parseFloat(amountInput.value);

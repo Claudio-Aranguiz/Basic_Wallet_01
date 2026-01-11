@@ -3,6 +3,10 @@
  * Gestiona sesiones de usuario y sincronización de datos
  */
 
+
+
+const PUBLIC_PAGES = ['/index.html', '/login.html', '/', '/views/index.html', '/views/login.html'];
+
 class SessionManager {
     constructor() {
         this.database = null;
@@ -55,7 +59,7 @@ class SessionManager {
             const sessionData = localStorage.getItem('alkewallet_session');
             if (sessionData) {
                 const session = JSON.parse(sessionData);
-                
+
                 // Verificar que la sesión no haya expirado
                 const now = new Date().getTime();
                 if (session.expires > now) {
@@ -68,7 +72,7 @@ class SessionManager {
                         return;
                     }
                 }
-                
+
                 // Sesión inválida
                 this.clearSession();
             }
@@ -86,7 +90,7 @@ class SessionManager {
                     userId: this.currentUser.id,
                     expires: new Date().getTime() + (24 * 60 * 60 * 1000) // 24 horas
                 };
-                
+
                 localStorage.setItem('alkewallet_session', JSON.stringify(session));
                 localStorage.setItem('alkewallet_user', JSON.stringify(this.currentUser));
                 console.log('💾 Sesión guardada para:', this.currentUser.firstName);
@@ -99,7 +103,7 @@ class SessionManager {
     // Iniciar sesión
     login(email, password) {
         console.log('🔐 Intentando login:', email);
-        
+
         if (!this.database?.users) {
             console.error('❌ Database no disponible');
             return { success: false, message: 'Error del sistema. Base de datos no disponible.' };
@@ -110,7 +114,7 @@ class SessionManager {
         password = password.trim();
 
         // Buscar usuario
-        const user = this.database.users.find(u => 
+        const user = this.database.users.find(u =>
             (u.email === email || u.username === email) && u.password === password
         );
 
@@ -205,8 +209,7 @@ class SessionManager {
     // Verificar acceso a página
     checkPageAccess() {
         const currentPath = window.location.pathname;
-        const publicPages = ['/index.html', '/login.html', '/', '/views/index.html', '/views/login.html'];
-        const isPublicPage = publicPages.some(page => currentPath.endsWith(page) || currentPath === '/');
+        const isPublicPage = PUBLIC_PAGES.some(page => currentPath.endsWith(page) || currentPath === '/');
 
         if (!isPublicPage && !this.isAuthenticated) {
             console.log('❌ Acceso denegado. Redirigiendo a login...');
@@ -229,7 +232,7 @@ class SessionManager {
         if (!this.currentUser) return false;
 
         this.currentUser.balance = newBalance;
-        
+
         // Actualizar en database local
         if (this.database?.users) {
             const userIndex = this.database.users.findIndex(u => u.id === this.currentUser.id);
@@ -251,7 +254,7 @@ class SessionManager {
 
     // Buscar usuario por email/username
     findUser(identifier) {
-        return this.database?.users?.find(u => 
+        return this.database?.users?.find(u =>
             (u.email === identifier || u.username === identifier) && u.isActive
         );
     }

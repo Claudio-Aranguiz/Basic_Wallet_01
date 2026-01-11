@@ -14,14 +14,14 @@
 
     <link rel="stylesheet" href="../css/styles.css">
 </head>
-<body class="text-center">
-    <main id="mainlog">
+<body class="text-center landing-page-bg">
+    <main id="mainlog" class="app-container d-flex align-items-center justify-content-center">
       <div class="container d-flex flex-column justify-content-center align-items-center">
         <div class="login-card fade-in">
           <div class="text-center mb-4">
             <h2 class="h3 fw-bold">Inicie su Sesión</h2>
           </div>
-          <form onsubmit="handleLogin(event)" class="login-form my-4">
+          <form class="login-form my-4">
             <div class="mb-3">
               <label for="email" class="form-label fw-semibold">Correo electrónico</label>
               <input type="email" class="form-control" id="email" name="email" placeholder="Ingresa tu email" required>
@@ -40,11 +40,12 @@
           <div class="mt-3">
             <span>¿No tienes una cuenta? <a href="#" data-toggle="modal" data-target="#registerModal">Regístrate</a></span>
           </div>
+          <div class="mt-4 pt-2 border-top border-secondary">
+              <a class="btn btn-outline-warning mt-3" href="./index.html">Cancelar</a>
+          </div>
+        </div>
       </div>
     </main>
-    <section class="my-4">
-        <a class="btn btn-outline-warning" href="./index.html">Cancelar</a>
-    </section>
     <!-- Modal para registro de usuario -->
     <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
