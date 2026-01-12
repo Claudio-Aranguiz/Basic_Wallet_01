@@ -60,3 +60,91 @@ main {
 ::-webkit-scrollbar-thumb:hover {
     background: #6c757d;
 }
+
+/* --- ESTILOS PARA FORMULARIOS --- */
+/* Checkbox personalizado para "Recuérdame" */
+.form-check-input:checked {
+    background-color: var(--highlight-color) !important;
+    border-color: var(--highlight-color) !important;
+}
+
+.form-check-input:focus {
+    border-color: var(--active-color);
+    box-shadow: 0 0 0 0.2rem rgba(27, 249, 241, 0.25);
+}
+
+.form-check-label {
+    color: var(--text-color);
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.form-check-label:hover {
+    color: var(--highlight-color);
+}
+
+/* Efecto visual para campos pre-llenados */
+.form-control.pre-filled {
+    background-color: rgba(27, 249, 241, 0.05);
+    border-color: var(--highlight-color);
+    animation: subtle-glow 0.5s ease-in-out;
+}
+
+@keyframes subtle-glow {
+    0% { box-shadow: 0 0 0 0 rgba(27, 249, 241, 0.5); }
+    50% { box-shadow: 0 0 10px 2px rgba(27, 249, 241, 0.2); }
+    100% { box-shadow: 0 0 0 0 rgba(27, 249, 241, 0); }
+}
+
+/* --- ESTILOS PARA TOGGLE DE CONTRASEÑA --- */
+.password-toggle {
+    background-color: transparent !important;
+    border-color: #ced4da !important;
+    color: var(--text-color) !important;
+    border-left: none !important;
+    transition: all 0.2s ease;
+    min-width: 45px;
+}
+
+.password-toggle:hover {
+    background-color: rgba(27, 249, 241, 0.1) !important;
+    border-color: var(--highlight-color) !important;
+    color: var(--highlight-color) !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.password-toggle:focus {
+    background-color: rgba(27, 249, 241, 0.1) !important;
+    border-color: var(--highlight-color) !important;
+    color: var(--highlight-color) !important;
+    box-shadow: 0 0 0 0.2rem rgba(27, 249, 241, 0.25) !important;
+    outline: none !important;
+}
+
+.password-toggle:active {
+    background-color: rgba(27, 249, 241, 0.2) !important;
+    border-color: var(--highlight-color) !important;
+    color: var(--active-color) !important;
+}
+
+.input-group .form-control:focus {
+    border-right-color: var(--highlight-color) !important;
+    z-index: 3;
+}
+
+.input-group .password-toggle {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+/* Animación para el cambio de icono */
+.password-toggle i {
+    transition: transform 0.2s ease, opacity 0.15s ease;
+}
+
+.password-toggle:active i {
+    transform: scale(0.95);
+}
