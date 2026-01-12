@@ -6,9 +6,29 @@
 
 ## 🚀 Estado del Proyecto (Enero 2026)
 
-**Progreso: 100% (Fase 2: Mantenimiento y Optimización Completada)** ⭐⭐⭐⭐⭐
+**Progreso: 100% (Fase 2: Mantenimiento y Optimización Completada + Nuevas Funcionalidades UX)** ⭐⭐⭐⭐⭐
 
-### ✅ Arquitectura y Mejoras Recientes
+### ✅ Nuevas Funcionalidades Implementadas (Enero 2026)
+
+- **🔐 Sistema "Recuérdame" Avanzado**: 
+  - Funcionalidad completa para mantener datos de login preiniciados
+  - Almacenamiento seguro en localStorage con expiración automática (30 días)
+  - Solo guarda información no sensible (email), nunca contraseñas
+  - Precarga automática de datos con efectos visuales y notificaciones informativas
+
+- **👁️ Toggle de Contraseña Interactivo**:
+  - Botón de mostrar/ocultar contraseña con icono dinámico (Font Awesome)
+  - Implementación jQuery con experiencia táctil optimizada para móvil
+  - Auto-ocultar por seguridad cuando pierde el foco
+  - Diseño responsivo con estilos coherentes al tema AlkeWallet
+
+- **♿ Mejoras de Accesibilidad y Compatibilidad**:
+  - Soporte completo Safari 3+ con prefijos CSS `-webkit-`
+  - Atributos `title` y `aria-labels` para lectores de pantalla
+  - Orden correcto de prefijos CSS según estándares web
+  - Experiencia táctil mejorada en dispositivos móviles
+
+### ✅ Arquitectura y Mejoras Previas
 
 - **🎨 Arquitectura CSS Modular**: 
   - Estilos organizados en capas: `styles.css` (Base), `mobile.css` (Mobile-First), `tablet-desktop.css` (Responsive) y `modals-alerts.css` (Componentes específicos).
@@ -87,6 +107,13 @@ AlkeWallet/
 - Control de acceso de páginas basado en el estado de la sesión.
 - Protección de rutas privadas.
 - Limpieza automática de datos sensibles al cerrar sesión.
+- **NUEVO**: Sistema "Recuérdame" con almacenamiento seguro y expiración automática.
+
+### 🎨 Experiencia de Usuario (UX/UI)
+- **NUEVO**: Toggle visual de contraseña con iconos dinámicos.
+- **NUEVO**: Notificaciones informativas para funciones de recordar datos.
+- **NUEVO**: Efectos visuales para campos preiniciados.
+- **NUEVO**: Compatibilidad cross-browser optimizada (Safari, Chrome, Firefox, Edge).
 
 ---
 
@@ -106,7 +133,8 @@ AlkeWallet/
 
 ## 👨‍💻 Información Técnica
 **Desarrollado por**: Claudio Aránguiz  
-**Versión Actual**: 2.0.0 (Optimized Core)  
+**Versión Actual**: 2.1.0 (Enhanced UX + Login Improvements)  
+**Última Actualización**: Enero 2026 - Funcionalidades "Recuérdame" y Toggle de Contraseña  
 **Licencia**: Académica (Educacional)
 
 ---
